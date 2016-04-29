@@ -1,10 +1,6 @@
 package com.example.billy.sousbox;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,14 +12,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
+import com.example.billy.sousbox.Keys.Keys;
+import com.example.billy.sousbox.api.FoodTwoForkObjects;
+import com.example.billy.sousbox.api.RecipeAPI;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
@@ -37,6 +40,10 @@ public class MainActivity extends AppCompatActivity
     private ArrayAdapter<String> arrayAdapter;
     private int i;
 
+    RecipeAPI searchFoodTwoFork;
+    public final static String MASHAPLE_HEADER = Keys.getMASHAPLE();
+
+
     SwipeFlingAdapterView flingContainer;
 
 
@@ -48,22 +55,14 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         ButterKnife.inject(this);
 
-
         setViews();
-        setDrawer();
-        //navigationView.setNavigationItemSelectedListener(this);
-
+        //setDrawer();
+//        navigationView.setNavigationItemSelectedListener(this);
+//        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 
         al = new ArrayList<>();
-        al.add("php");
-        al.add("c");
-        al.add("python");
-        al.add("java");
-        al.add("html");
-        al.add("c++");
-        al.add("css");
-        al.add("javascript");
+
 
         arrayAdapter = new ArrayAdapter<>(this, R.layout.item, R.id.helloText, al );
 
@@ -113,6 +112,8 @@ public class MainActivity extends AppCompatActivity
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
+
+
                 Timber.i("Clicked!");
             }
         });
@@ -144,7 +145,10 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         toggle.syncState();
+
+
     }
 
 
@@ -176,6 +180,10 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.nav_bar){
+            //setDrawer();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -203,4 +211,28 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void retrofitRecipe() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        searchFoodTwoFork = retrofit.create(RecipeAPI.class);
+
+        Call<FoodTwoForkObjects> call = searchFoodTwoFork.pullRecipe();
+        call.enqueue(new Callback<FoodTwoForkObjects>() {
+            @Override
+            public void onResponse(Call<FoodTwoForkObjects> call, Response<FoodTwoForkObjects> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<FoodTwoForkObjects> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 }
