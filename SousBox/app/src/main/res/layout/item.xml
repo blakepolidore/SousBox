@@ -6,12 +6,12 @@
     android:layout_width="250dp"
     android:layout_height="170dp">
 
-    <TextView
+    <ImageView
+        android:src="@drawable/ic_menu_gallery"
         android:id="@+id/helloText"
         android:textColor="@android:color/white"
         android:background="#E339"
         android:gravity="center"
-        tools:text="Hello World"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/saved_recipe_imageOne_id"
+        android:layout_width="175dp"
+        android:layout_height="175dp" />
+
+    <TextView
+        android:layout_marginTop="150dp"
+        android:text="imageOne Title"
+        android:id="@+id/saved_recipe_imageOne_title_id"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content" />
+
+
+    <ImageView
+        android:id="@+id/saved_recipe_imageTwo_id"
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:layout_gravity="right|top" />
+
+    <TextView
+        android:layout_marginTop="150dp"
+        android:text="imageTwo Title"
+        android:id="@+id/saved_recipe_imagetwo_title_id"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top" />
+
+</FrameLayout>

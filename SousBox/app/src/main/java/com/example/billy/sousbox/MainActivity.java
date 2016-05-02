@@ -1,6 +1,7 @@
 package com.example.billy.sousbox;
 
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,11 +15,18 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import com.example.billy.sousbox.Keys.Keys;
-import com.example.billy.sousbox.api.FoodTwoForkObjects;
+import com.example.billy.sousbox.api.SpoonacularObjects;
+import com.example.billy.sousbox.api.SpoonacularResults;
+import com.example.billy.sousbox.food2forkapi.FoodTwoForkObjects;
 import com.example.billy.sousbox.api.RecipeAPI;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,9 +48,10 @@ public class MainActivity extends AppCompatActivity
     private ArrayAdapter<String> arrayAdapter;
     private int i;
 
-    RecipeAPI searchFoodTwoFork;
+    RecipeAPI searchAPI;
     public final static String MASHAPLE_HEADER = Keys.getMASHAPLE();
-
+    private String CHINESE = "chinese";
+    private String BEEF = "beef";
 
     SwipeFlingAdapterView flingContainer;
 
@@ -55,26 +64,31 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         ButterKnife.inject(this);
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+
+
         setViews();
         //setDrawer();
-//        navigationView.setNavigationItemSelectedListener(this);
-//        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        navigationView.setNavigationItemSelectedListener(this);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 
         al = new ArrayList<>();
 
 
-        arrayAdapter = new ArrayAdapter<>(this, R.layout.item, R.id.helloText, al );
+      //  arrayAdapter = new ArrayAdapter<String>(this, al);
 
 
         flingContainer.setAdapter(arrayAdapter);
+
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
                 al.remove(0);
-                arrayAdapter.notifyDataSetChanged();
+//                arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -92,11 +106,14 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
+
+                retrofitRecipe();
+
                 // Ask for more data here
-                al.add("XML ".concat(String.valueOf(i)));
-                arrayAdapter.notifyDataSetChanged();
-                Log.d("LIST", "notified");
-                i++;
+//                al.add("XML ".concat(String.valueOf(i)));
+//                arrayAdapter.notifyDataSetChanged();
+//                Log.d("LIST", "notified");
+//                i++;
             }
 
             @Override
@@ -178,10 +195,13 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            setDrawer();
+
             return true;
         }
         if (id == R.id.nav_bar){
-            //setDrawer();
+
             return true;
         }
 
@@ -218,20 +238,25 @@ public class MainActivity extends AppCompatActivity
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        searchFoodTwoFork = retrofit.create(RecipeAPI.class);
+        searchAPI = retrofit.create(RecipeAPI.class);
 
-        Call<FoodTwoForkObjects> call = searchFoodTwoFork.pullRecipe();
-        call.enqueue(new Callback<FoodTwoForkObjects>() {
+
+
+        Call<SpoonacularResults> call = searchAPI.searchRecipe(BEEF);
+        call.enqueue(new Callback<SpoonacularResults>() {
             @Override
-            public void onResponse(Call<FoodTwoForkObjects> call, Response<FoodTwoForkObjects> response) {
+            public void onResponse(Call<SpoonacularResults> call, Response<SpoonacularResults> response) {
+                SpoonacularResults spoonacularResults = response.body();
 
+                //arrayAdapter.notifyDataSetChanged(spoonacularResults.getResults());
             }
 
             @Override
-            public void onFailure(Call<FoodTwoForkObjects> call, Throwable t) {
+            public void onFailure(Call<SpoonacularResults> call, Throwable t) {
 
             }
         });
+
 
     }
 

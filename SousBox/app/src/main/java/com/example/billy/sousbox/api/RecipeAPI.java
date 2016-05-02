@@ -1,10 +1,12 @@
 package com.example.billy.sousbox.api;
 
 import com.example.billy.sousbox.Keys.Keys;
+import com.example.billy.sousbox.food2forkapi.FoodTwoForkObjects;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -13,14 +15,11 @@ import retrofit2.http.Query;
  */
 public interface RecipeAPI {
 
-    @GET("search?key=" + Keys.FOOD2FORK)
-    Call<FoodTwoForkObjects> pullRecipe();
 
-    @GET("search?cuisine={q}&diet=vegetarian&excludeIngredients=coconut&intolerances=egg%2C+gluten&limitLicense=false&number=10&offset=0&query=burger&type=main+course")
-    Call<FoodTwoForkObjects> searchRecipe(@Query("q") String cuisine);
+    @Headers("X-Mashape-Key: " + Keys.MASHAPLE)
+    @GET("search?limitLicense=false&number=40&offset=0&query={q}")
+    Call<SpoonacularResults> searchRecipe(@Query("q")String q);
 
-    @GET("X-Mashape-Key")
-    Call<Keys> getKeys(@Header(Keys.MASHAPLE) String authorization);
 
 
 }

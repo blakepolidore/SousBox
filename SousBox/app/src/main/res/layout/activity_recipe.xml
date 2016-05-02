@@ -10,13 +10,12 @@
     android:orientation="vertical"
     tools:context="com.example.billy.sousbox.RecipeActivity">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/saved_recipeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/recipe_imageView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-
-        />
+    </android.support.v7.widget.RecyclerView>
 
 
 
