@@ -34,6 +34,7 @@ public class LoginActivityFragment extends Fragment {
 
         info = (TextView)v.findViewById(R.id.info);
         loginButton = (LoginButton)v.findViewById(R.id.login_button);
+        loginButton.setFragment(this);
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override

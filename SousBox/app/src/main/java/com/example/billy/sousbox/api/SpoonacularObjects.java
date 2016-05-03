@@ -8,10 +8,10 @@ public class SpoonacularObjects {
     private String title;
     private String readyInMinutes;
     private String image;
-    private String imageUrls;
+    private String[] imageUrls;
 
 
-    public SpoonacularObjects(int id, String title, String readyInMinutes, String image, String imageUrls) {
+    public SpoonacularObjects(int id, String title, String readyInMinutes, String image, String[] imageUrls) {
         this.id = id;
         this.title = title;
         this.readyInMinutes = readyInMinutes;
@@ -52,11 +52,11 @@ public class SpoonacularObjects {
         this.image = image;
     }
 
-    public String getImageUrls() {
+    public String[] getImageUrls() {
         return imageUrls;
     }
 
-    public void setImageUrls(String imageUrls) {
+    public void setImageUrls(String[] imageUrls) {
         this.imageUrls = imageUrls;
     }
 }
