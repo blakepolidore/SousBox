@@ -5,14 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <com.lorentzos.flingswipe.SwipeFlingAdapterView
-        android:layout_marginTop="50dp"
         android:id="@+id/frame"
         android:background="#ffeee9e2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:rotation_degrees="15.5"
-        tools:context=".MainActivity" />
+        tools:context=".MyActivity" />
 
     <include layout="@layout/buttons" />
 
 </merge>
+

@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.FrameLayout;
 
-
+import com.example.billy.sousbox.R;
 
 
 /**
@@ -42,16 +42,16 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
     }
 
     public SwipeFlingAdapterView(Context context, AttributeSet attrs) {
-        this(context, attrs, com.lorentzos.flingswipe.R.attr.SwipeFlingStyle);
+        this(context, attrs, R.attr.SwipeFlingStyle);
     }
 
     public SwipeFlingAdapterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, com.lorentzos.flingswipe.R.styleable.SwipeFlingAdapterView, defStyle, 0);
-        MAX_VISIBLE = a.getInt(com.lorentzos.flingswipe.R.styleable.SwipeFlingAdapterView_max_visible, MAX_VISIBLE);
-        MIN_ADAPTER_STACK = a.getInt(com.lorentzos.flingswipe.R.styleable.SwipeFlingAdapterView_min_adapter_stack, MIN_ADAPTER_STACK);
-        ROTATION_DEGREES = a.getFloat(com.lorentzos.flingswipe.R.styleable.SwipeFlingAdapterView_rotation_degrees, ROTATION_DEGREES);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SwipeFlingAdapterView, defStyle, 0);
+        MAX_VISIBLE = a.getInt(R.styleable.SwipeFlingAdapterView_max_visible, MAX_VISIBLE);
+        MIN_ADAPTER_STACK = a.getInt(R.styleable.SwipeFlingAdapterView_min_adapter_stack, MIN_ADAPTER_STACK);
+        ROTATION_DEGREES = a.getFloat(R.styleable.SwipeFlingAdapterView_rotation_degrees, ROTATION_DEGREES);
         a.recycle();
     }
 

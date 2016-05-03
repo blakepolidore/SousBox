@@ -1,4 +1,4 @@
-package com.example.billy.sousbox;
+package com.example.billy.sousbox.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.billy.sousbox.R;
 import com.example.billy.sousbox.api.SpoonacularObjects;
 import com.squareup.picasso.Picasso;
 

@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/saved_recipe_imageOne_id"
-        android:layout_width="175dp"
+        android:layout_width="wrap_content"
         android:layout_height="175dp" />
 
     <TextView

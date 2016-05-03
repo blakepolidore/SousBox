@@ -20,6 +20,8 @@ public class SpoonacularObjects {
     }
 
 
+
+
     public int getId() {
         return id;
     }

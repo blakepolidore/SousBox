@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.example.billy.sousbox.adapters.RecycleViewAdatper;
 import com.example.billy.sousbox.api.RecipeAPI;
 import com.example.billy.sousbox.api.SpoonacularObjects;
 import com.example.billy.sousbox.api.SpoonacularResults;
@@ -44,7 +45,8 @@ public class RecipeActivity extends AppCompatActivity {
         retrofitRecipe();
 
         recycleAdapter = new RecycleViewAdatper(recipeLists);
-        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
+        //recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
     }
 

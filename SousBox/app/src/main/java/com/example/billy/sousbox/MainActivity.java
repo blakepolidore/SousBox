@@ -1,7 +1,6 @@
 package com.example.billy.sousbox;
 
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -12,21 +11,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 
 import com.example.billy.sousbox.Keys.Keys;
+import com.example.billy.sousbox.adapters.CardAdapter;
 import com.example.billy.sousbox.api.SpoonacularObjects;
 import com.example.billy.sousbox.api.SpoonacularResults;
-import com.example.billy.sousbox.food2forkapi.FoodTwoForkObjects;
+//import com.example.billy.sousbox.flingsswipe.SwipeFlingAdapterView;
 import com.example.billy.sousbox.api.RecipeAPI;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,6 +32,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
+//import com.bumptech.glide.Glide;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,14 +42,14 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private ArrayList<String> al;
-    private ArrayAdapter<String> arrayAdapter;
+    private ArrayList<SpoonacularObjects> recipeLists;
+    private CardAdapter adapter;
     private int i;
 
     RecipeAPI searchAPI;
     public final static String MASHAPLE_HEADER = Keys.getMASHAPLE();
     private String CHINESE = "chinese";
-    private String BEEF = "beef";
+    private String foodType = "beef, chicken";
 
     SwipeFlingAdapterView flingContainer;
 
@@ -74,21 +72,21 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 
-        al = new ArrayList<>();
+        recipeLists = new ArrayList<>();
 
 
-      //  arrayAdapter = new ArrayAdapter<String>(this, al);
+        retrofitRecipe();
+        adapter = new CardAdapter(MainActivity.this, recipeLists);
 
-
-        flingContainer.setAdapter(arrayAdapter);
+        flingContainer.setAdapter(adapter);
 
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
-                al.remove(0);
-//                arrayAdapter.notifyDataSetChanged();
+                recipeLists.remove(0);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -96,18 +94,24 @@ public class MainActivity extends AppCompatActivity
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
+
+                recipeLists.remove(0);
+                adapter.notifyDataSetChanged();
                 Timber.i("Left!");
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
+
+                recipeLists.remove(0);
+                adapter.notifyDataSetChanged();
                 Timber.i("Right!");
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
 
-                retrofitRecipe();
+                //etrofitRecipe();
 
                 // Ask for more data here
 //                al.add("XML ".concat(String.valueOf(i)));
@@ -232,6 +236,8 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
+
     private void retrofitRecipe() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/")
@@ -240,24 +246,28 @@ public class MainActivity extends AppCompatActivity
 
         searchAPI = retrofit.create(RecipeAPI.class);
 
-
-
-        Call<SpoonacularResults> call = searchAPI.searchRecipe(BEEF);
+        Call<SpoonacularResults> call = searchAPI.searchRecipe(foodType);
         call.enqueue(new Callback<SpoonacularResults>() {
             @Override
             public void onResponse(Call<SpoonacularResults> call, Response<SpoonacularResults> response) {
                 SpoonacularResults spoonacularResults = response.body();
 
+
+                if(spoonacularResults == null){
+                    return;
+                }
+
+                Collections.addAll(recipeLists, spoonacularResults.getResults());
+                adapter.notifyDataSetChanged();
                 //arrayAdapter.notifyDataSetChanged(spoonacularResults.getResults());
             }
 
             @Override
             public void onFailure(Call<SpoonacularResults> call, Throwable t) {
+                t.printStackTrace();
 
             }
         });
-
-
     }
 
 }
