@@ -23,6 +23,8 @@ public class CardAdapter extends ArrayAdapter<SpoonacularObjects> {
 
     List<SpoonacularObjects> recipeData;
 
+
+
     public CardAdapter(Context context, List<SpoonacularObjects> recipeData) {
         super(context, -1, recipeData);
         this.recipeData = recipeData;
@@ -36,12 +38,12 @@ public class CardAdapter extends ArrayAdapter<SpoonacularObjects> {
         TextView titleText = (TextView) view.findViewById(R.id.swipeCard_titleView);
         ImageView image = (ImageView) view.findViewById(R.id.swipeCardImage);
 
-        String title = recipeData.get(position).getTitle();
+        String title = recipeData.get(0).getTitle();
         titleText.setText(title);
 
         String imageURI = recipeData.get(position).getImage();
         if (imageURI.isEmpty()) {
-            imageURI = "R.drawable.ic_menu_gallery";
+            imageURI = "R.drawable.foodmenu.png";
         }
 
         Picasso.with(getContext())
@@ -51,8 +53,9 @@ public class CardAdapter extends ArrayAdapter<SpoonacularObjects> {
                 .centerCrop()
                 .into(image);
 
-
         return view;
     }
+
+
 
 }

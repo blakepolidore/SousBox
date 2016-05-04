@@ -23,6 +23,7 @@ import com.facebook.appevents.AppEventsLogger;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity
     RecipeAPI searchAPI;
     public final static String MASHAPLE_HEADER = Keys.getMASHAPLE();
     private String CHINESE = "chinese";
-    private String foodType = "beef, chicken";
+    private String foodType = "beef";
+    private int OFFSET = 20;
 
     SwipeFlingAdapterView flingContainer;
 
@@ -84,9 +86,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
-                Log.d("LIST", "removed object!");
+
+
                 recipeLists.remove(0);
                 adapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -94,10 +98,10 @@ public class MainActivity extends AppCompatActivity
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-
+                Timber.i("Saved");
                 recipeLists.remove(0);
                 adapter.notifyDataSetChanged();
-                Timber.i("Left!");
+
             }
 
             @Override
@@ -105,13 +109,19 @@ public class MainActivity extends AppCompatActivity
 
                 recipeLists.remove(0);
                 adapter.notifyDataSetChanged();
-                Timber.i("Right!");
+                Timber.i("Not like");
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
 
-                //etrofitRecipe();
+                if(recipeLists == null){
+                    int moreRecipe = OFFSET *2;
+                    moreRetrofitRecipePulling(moreRecipe);
+                }
+//                if(itemsInAdapter == 29){
+//                moreRetrofitRecipePulling();
+//                }
 
                 // Ask for more data here
 //                al.add("XML ".concat(String.valueOf(i)));
@@ -253,10 +263,43 @@ public class MainActivity extends AppCompatActivity
                 SpoonacularResults spoonacularResults = response.body();
 
 
+                if (spoonacularResults == null) {
+                    return;
+                }
+
+                Collections.addAll(recipeLists, spoonacularResults.getResults());
+                adapter.notifyDataSetChanged();
+                //arrayAdapter.notifyDataSetChanged(spoonacularResults.getResults());
+            }
+
+            @Override
+            public void onFailure(Call<SpoonacularResults> call, Throwable t) {
+                t.printStackTrace();
+
+            }
+        });
+    }
+
+    private void moreRetrofitRecipePulling(int limit) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        searchAPI = retrofit.create(RecipeAPI.class);
+
+        Call<SpoonacularResults> call = searchAPI.searchMoreRecipe(limit, foodType);
+        call.enqueue(new Callback<SpoonacularResults>() {
+            @Override
+            public void onResponse(Call<SpoonacularResults> call, Response<SpoonacularResults> response) {
+                SpoonacularResults spoonacularResults = response.body();
+
+
                 if(spoonacularResults == null){
                     return;
                 }
 
+                Timber.i("pulling more listing");
                 Collections.addAll(recipeLists, spoonacularResults.getResults());
                 adapter.notifyDataSetChanged();
                 //arrayAdapter.notifyDataSetChanged(spoonacularResults.getResults());

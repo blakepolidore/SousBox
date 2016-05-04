@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+<FrameLayout
     android:layout_marginTop="50dp"
     android:layout_gravity="top|center"
     android:layout_width="match_parent"
     android:layout_height="250dp">
 
     <ImageView
-        android:src="@drawable/ic_menu_gallery"
         android:id="@+id/swipeCardImage"
         android:textColor="@android:color/white"
         android:gravity="center"
@@ -32,14 +38,16 @@
         android:layout_gravity="right"
         android:background="#5AF" />
 
+</FrameLayout>
     <TextView
+        android:layout_gravity="center"
         android:textSize="25dp"
-        android:text="Beef"
+        android:text=" "
         android:textStyle="bold"
         android:textColor="@android:color/holo_blue_dark"
         android:id="@+id/swipeCard_titleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom" />
+        />
 
-</FrameLayout>
+</LinearLayout>

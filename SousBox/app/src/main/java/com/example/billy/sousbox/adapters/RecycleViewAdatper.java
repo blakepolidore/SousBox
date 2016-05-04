@@ -76,12 +76,12 @@ public class RecycleViewAdatper extends RecyclerView.Adapter<RecycleViewAdatper.
 //
         String imageURI = data.get(position).getImage();
         if (imageURI.isEmpty()) {
-            imageURI = "R.drawable.ic_menu_gallery";
+            imageURI = "R.drawable.foodmenu";
         }
 
         Picasso.with(context)
                 .load("https://webknox.com/recipeImages/"+ imageURI)
-                .placeholder(R.drawable.ic_menu_gallery)
+                .placeholder(R.drawable.foodmenu)
                 .resize(100, 100)
                 .centerCrop()
                 .into(holder.recipeImageView);
