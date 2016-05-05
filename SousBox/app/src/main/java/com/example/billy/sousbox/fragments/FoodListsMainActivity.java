@@ -31,12 +31,15 @@ import timber.log.Timber;
 /**
  * Created by Billy on 5/4/16.
  */
-public class RecipeListsMainActivity extends Fragment {
+public class FoodListsMainActivity extends Fragment {
 
     private RecycleViewAdatper recycleAdapter;
     private RecyclerView recyclerView;
     private RecipeAPI foodRecipePulling;
     private ArrayList<SpoonacularObjects> recipeLists;
+    public final static String RECIPEID_KEY = "recipeID";
+    public final static String IMAGE_KEY = "image";
+
     private int numberOfRecipe = 30;
     private RecipeAPI searchAPI;
     private String BEEF = "beef";
@@ -76,8 +79,8 @@ public class RecipeListsMainActivity extends Fragment {
                 Bundle recipeId = new Bundle(); //will bundle the 5 fields of newsWireObjects in a string array
                 int recipe = recipeLists.get(position).getId();
                 String image = recipeLists.get(position).getImage();
-                recipeId.putInt("recipeID", recipe);
-                recipeId.putString("image", image);
+                recipeId.putInt(RECIPEID_KEY, recipe);
+                recipeId.putString(IMAGE_KEY, image);
 
 
                 Fragment ingredients = new IngredientsActivity();

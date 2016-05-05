@@ -30,7 +30,7 @@ public class LoginActivityFragment extends Fragment {
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private FrameLayout fragContainer;
-    private RecipeListsMainActivity recipeListsFrag;
+    private FoodListsMainActivity recipeListsFrag;
 
 
     @Nullable
@@ -44,8 +44,8 @@ public class LoginActivityFragment extends Fragment {
         loginButton.setFragment(this);
         info = (TextView)v.findViewById(R.id.info);
         fragContainer = (FrameLayout)v.findViewById(R.id.fragment_container_id);
-        recipeListsFrag = new RecipeListsMainActivity();
-        //fragmentManager = getFragmentManager();
+        recipeListsFrag = new FoodListsMainActivity();
+        fragmentManager = getFragmentManager();
 
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -57,7 +57,7 @@ public class LoginActivityFragment extends Fragment {
                                // + loginResult.getAccessToken().getToken()
                 );
 
-               // fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container_id, recipeListsFrag);
                 fragmentTransaction.commit();
             }

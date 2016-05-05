@@ -72,8 +72,8 @@ public class IngredientsActivity extends Fragment {
         searchAPI = retrofit.create(RecipeAPI.class);
 
         Bundle bundle = getArguments();
-        id = bundle.getInt("recipeID");
-        image = bundle.getString("image");
+        id = bundle.getInt(FoodListsMainActivity.RECIPEID_KEY);
+        image = bundle.getString(FoodListsMainActivity.IMAGE_KEY);
 
 
         Call<GetRecipeObjects> call = searchAPI.getRecipeIngredients(id);
