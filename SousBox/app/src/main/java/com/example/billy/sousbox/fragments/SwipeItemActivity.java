@@ -55,11 +55,9 @@ public class SwipeItemActivity extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.swipe_item_fragment, container, false);
+        View v = inflater.inflate(R.layout.swipe_activity_fragment, container, false);
 
         ButterKnife.inject(getActivity());
-
-
         setViews(v);
         recipeLists = new ArrayList<>();
 
@@ -101,8 +99,8 @@ public class SwipeItemActivity extends Fragment {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                int moreRecipe = OFFSET *2;
-                moreRetrofitRecipePulling(moreRecipe);
+                //int moreRecipe = OFFSET *2;
+               // moreRetrofitRecipePulling(moreRecipe);
 //                if(itemsInAdapter == 29){
 //                moreRetrofitRecipePulling();
 //                }
