@@ -3,9 +3,12 @@ package com.example.billy.sousbox.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.billy.sousbox.R;
@@ -24,6 +27,11 @@ public class LoginActivityFragment extends Fragment {
     private TextView info;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private FrameLayout fragContainer;
+    private RecipeListsMainActivity recipeListsFrag;
+
 
     @Nullable
     @Override
@@ -32,20 +40,26 @@ public class LoginActivityFragment extends Fragment {
         FacebookSdk.sdkInitialize(v.getContext());
         callbackManager = CallbackManager.Factory.create();
 
-        info = (TextView)v.findViewById(R.id.info);
         loginButton = (LoginButton)v.findViewById(R.id.login_button);
         loginButton.setFragment(this);
+        info = (TextView)v.findViewById(R.id.info);
+        fragContainer = (FrameLayout)v.findViewById(R.id.fragment_container_id);
+        recipeListsFrag = new RecipeListsMainActivity();
+        //fragmentManager = getFragmentManager();
+
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                info.setText(
-                        "User ID: "
-                                + loginResult.getAccessToken().getUserId()
-                                + "\n" +
-                                "Auth Token: "
-                                + loginResult.getAccessToken().getToken()
+                info.setText("User ID: " + loginResult.getAccessToken().getUserId()
+                                //+ "\n" +
+                               // "Auth Token: "
+                               // + loginResult.getAccessToken().getToken()
                 );
+
+               // fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container_id, recipeListsFrag);
+                fragmentTransaction.commit();
             }
 
             @Override

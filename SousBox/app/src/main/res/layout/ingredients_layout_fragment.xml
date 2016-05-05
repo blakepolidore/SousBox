@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/ingredient_frame_container_id"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:orientation="vertical">
+<LinearLayout
+    android:layout_marginTop="50dp"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 
         <ImageView
+            android:id="@+id/ingredients_imageView_id"
             android:layout_width="fill_parent"
             android:layout_height="250dp"
-            android:scaleType="centerCrop"/>
+            />
 
         <TextView
+            android:textSize="20sp"
             android:gravity="center"
+            android:id="@+id/ingredients_titleView_id"
             android:text="Food Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <ListView
+            android:id="@+id/ingredients_listView_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
+        </ListView>
 
 
-</ScrollView>
+</LinearLayout>

@@ -68,21 +68,16 @@ public class RecycleViewAdatper extends RecyclerView.Adapter<RecycleViewAdatper.
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
 
-
-//        holder.headline.setText(data.get(position).getTitle());
-//        holder.articleAbstract.setText(data.get(position).getAbstractResult());
-//        holder.ago.setText(agoText);
         holder.recipeTitleText.setText(data.get(position).getTitle());
 //
         String imageURI = data.get(position).getImage();
         if (imageURI.isEmpty()) {
-            imageURI = "R.drawable.foodmenu";
+            imageURI = "R.drawable.blank_white.png";
         }
 
         Picasso.with(context)
                 .load("https://webknox.com/recipeImages/"+ imageURI)
-                .placeholder(R.drawable.foodmenu)
-                .resize(100, 100)
+                .resize(300, 300)
                 .centerCrop()
                 .into(holder.recipeImageView);
 

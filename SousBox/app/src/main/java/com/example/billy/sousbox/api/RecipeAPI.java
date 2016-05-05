@@ -17,15 +17,18 @@ public interface RecipeAPI {
 
 
     @Headers("X-Mashape-Key: " + Keys.MASHAPLE)
-    @GET("search?limitLicense=false&number=20&offset=0&")
+    @GET("search?limitLicense=false&number=50&offset=0&")
     Call<SpoonacularResults> searchRecipe(@Query("query")String q);
 
 
     @Headers("X-Mashape-Key: " + Keys.MASHAPLE)
-    @GET("search?limitLicense=false&number=20&offset={limit}&")
+    @GET("search?limitLicense=false&number=50&offset={limit}&")
     Call<SpoonacularResults> searchMoreRecipe(@Path("limit")int offset,
                                                 @Query("query")String q);
 
+    @Headers("X-Mashape-Key: " + Keys.MASHAPLE)
+    @GET("{id}/information")
+    Call<GetRecipeObjects> getRecipeIngredients(@Path("id")int id);
 
 
 }

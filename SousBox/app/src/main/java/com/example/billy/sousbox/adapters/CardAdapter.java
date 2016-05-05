@@ -1,6 +1,7 @@
 package com.example.billy.sousbox.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,6 @@ public class CardAdapter extends ArrayAdapter<SpoonacularObjects> {
     List<SpoonacularObjects> recipeData;
 
 
-
     public CardAdapter(Context context, List<SpoonacularObjects> recipeData) {
         super(context, -1, recipeData);
         this.recipeData = recipeData;
@@ -43,19 +43,18 @@ public class CardAdapter extends ArrayAdapter<SpoonacularObjects> {
 
         String imageURI = recipeData.get(position).getImage();
         if (imageURI.isEmpty()) {
-            imageURI = "R.drawable.foodmenu.png";
+            imageURI = "R.drawable.blank_white.png";
         }
 
         Picasso.with(getContext())
                 .load("https://webknox.com/recipeImages/"+ imageURI)
-                .placeholder(R.drawable.ic_menu_gallery)
-                .resize(100, 100)
+                .placeholder(R.drawable.blank_white)
+                .resize(300, 300)
                 .centerCrop()
                 .into(image);
 
         return view;
     }
-
 
 
 }
