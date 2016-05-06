@@ -41,7 +41,7 @@ public class InstructionsFragment extends Fragment {
 
 
         Bundle instructionBundle = getArguments();
-        instructionURL = instructionBundle.getString("url");
+        instructionURL = instructionBundle.getString(IngredientsFragment.URL_KEY);
 
 
         WebSettings webSettings = instructionsWebView.getSettings();

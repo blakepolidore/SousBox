@@ -18,6 +18,7 @@ import com.example.billy.sousbox.api.SpoonacularResults;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,7 +49,6 @@ public class FoodListsMainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.food_recipe_recycleview, container, false);
-
 
         setViews(v);
 
@@ -116,6 +116,9 @@ public class FoodListsMainFragment extends Fragment {
                 Collections.addAll(recipeLists, spoonacularResults.getResults());
 
                 if (recyclerView != null) {
+                    long seed = System.nanoTime();
+                    Collections.shuffle(recipeLists, new Random(seed));
+
                     recyclerView.setAdapter(recycleAdapter);
                     recycleAdapter.notifyDataSetChanged();
                 }

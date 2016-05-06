@@ -22,7 +22,7 @@ import com.facebook.login.widget.LoginButton;
 /**
  * Created by Billy on 5/2/16.
  */
-public class LoginFragment extends Fragment {
+public class PreferencesFragment extends Fragment {
 
     private TextView info;
     private LoginButton loginButton;
@@ -36,7 +36,7 @@ public class LoginFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fb_login_layout, container, false);
+        View v = inflater.inflate(R.layout.preferences_layout_fragment, container, false);
         FacebookSdk.sdkInitialize(v.getContext());
         callbackManager = CallbackManager.Factory.create();
 
@@ -57,9 +57,9 @@ public class LoginFragment extends Fragment {
                                // + loginResult.getAccessToken().getToken()
                 );
 
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container_id, recipeListsFrag);
-                fragmentTransaction.commit();
+//                fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.fragment_container_id, recipeListsFrag);
+//                fragmentTransaction.commit();
             }
 
             @Override
