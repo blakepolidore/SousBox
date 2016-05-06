@@ -11,6 +11,15 @@ public class GetRecipeObjects {
     private int readyInMinutes;
     private String title;
     private String image;
+    private String spoonacularSourceUrl;
+
+    public String getSpoonacularSourceUrl() {
+        return spoonacularSourceUrl;
+    }
+
+    public void setSpoonacularSourceUrl(String spoonacularSourceUrl) {
+        this.spoonacularSourceUrl = spoonacularSourceUrl;
+    }
 
     public String getSourceUrl() {
         return sourceUrl;

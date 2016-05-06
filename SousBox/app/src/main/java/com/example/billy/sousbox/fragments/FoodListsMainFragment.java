@@ -1,13 +1,11 @@
 package com.example.billy.sousbox.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,12 +29,15 @@ import timber.log.Timber;
 /**
  * Created by Billy on 5/4/16.
  */
-public class RecipeListsMainActivity extends Fragment {
+public class FoodListsMainFragment extends Fragment {
 
     private RecycleViewAdatper recycleAdapter;
     private RecyclerView recyclerView;
     private RecipeAPI foodRecipePulling;
     private ArrayList<SpoonacularObjects> recipeLists;
+    public final static String RECIPEID_KEY = "recipeID";
+    public final static String IMAGE_KEY = "image";
+
     private int numberOfRecipe = 30;
     private RecipeAPI searchAPI;
     private String BEEF = "beef";
@@ -73,14 +74,14 @@ public class RecipeListsMainActivity extends Fragment {
                 Timber.i(String.valueOf(position));
                 recipeLists.get(position);
 
-                Bundle recipeId = new Bundle(); //will bundle the 5 fields of newsWireObjects in a string array
+                Bundle recipeId = new Bundle();
                 int recipe = recipeLists.get(position).getId();
                 String image = recipeLists.get(position).getImage();
-                recipeId.putInt("recipeID", recipe);
-                recipeId.putString("image", image);
+                recipeId.putInt(RECIPEID_KEY, recipe);
+                recipeId.putString(IMAGE_KEY, image);
 
 
-                Fragment ingredients = new IngredientsActivity();
+                Fragment ingredients = new IngredientsFragment();
                 ingredients.setArguments(recipeId);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container_id, ingredients);

@@ -3,12 +3,13 @@ package com.example.billy.sousbox.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.billy.sousbox.Keys.Keys;
 import com.example.billy.sousbox.R;
@@ -16,15 +17,12 @@ import com.example.billy.sousbox.adapters.CardAdapter;
 import com.example.billy.sousbox.api.RecipeAPI;
 import com.example.billy.sousbox.api.SpoonacularObjects;
 import com.example.billy.sousbox.api.SpoonacularResults;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,9 +33,9 @@ import timber.log.Timber;
 /**
  * Created by Billy on 5/4/16.
  */
-public class SwipeItemActivity extends Fragment {
+public class SwipeItemFragment extends Fragment {
 
-
+    private static final String TAG = "SwipeItemFragment: ";
 
     private ArrayList<SpoonacularObjects> recipeLists;
     private CardAdapter adapter;
@@ -46,25 +44,43 @@ public class SwipeItemActivity extends Fragment {
     RecipeAPI searchAPI;
     public final static String MASHAPLE_HEADER = Keys.getMASHAPLE();
     private String CHINESE = "chinese";
-    private String foodType = "beef";
+    private String foodType = "beef, pork, chicken, seafood";
     private int OFFSET = 50;
 
+    SpoonacularObjects spoonRecipe;
+
     SwipeFlingAdapterView flingContainer;
+    Button left;
+    Button right;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.swipe_item_fragment, container, false);
+        View v = inflater.inflate(R.layout.swipe_recipe_fragment, container, false);
 
         ButterKnife.inject(getActivity());
-
-
-        setViews(v);
         recipeLists = new ArrayList<>();
-
-
         retrofitRecipe();
+
+        flingContainer = (SwipeFlingAdapterView) v.findViewById(R.id.frame);
+        left = (Button) v.findViewById(R.id.left);
+        right = (Button) v.findViewById(R.id.right);
+
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                left();
+            }
+        });
+
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                right();
+            }
+        });
+
         adapter = new CardAdapter(getContext(), recipeLists);
 
         flingContainer.setAdapter(adapter);
@@ -73,7 +89,6 @@ public class SwipeItemActivity extends Fragment {
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
-
 
                 recipeLists.remove(0);
                 adapter.notifyDataSetChanged();
@@ -85,6 +100,8 @@ public class SwipeItemActivity extends Fragment {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
+
+                Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT);
                 Timber.i("Saved");
                 recipeLists.remove(0);
                 adapter.notifyDataSetChanged();
@@ -101,8 +118,8 @@ public class SwipeItemActivity extends Fragment {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                int moreRecipe = OFFSET *2;
-                moreRetrofitRecipePulling(moreRecipe);
+                //int moreRecipe = OFFSET *2;
+                // moreRetrofitRecipePulling(moreRecipe);
 //                if(itemsInAdapter == 29){
 //                moreRetrofitRecipePulling();
 //                }
@@ -128,6 +145,33 @@ public class SwipeItemActivity extends Fragment {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
 
+                Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
+
+                //recipeLists.get(recipeLists.indexOf(0));
+
+                Bundle recipeId = new Bundle();
+
+                /**
+                 * need to find a way to populate only 1 object a time
+                 */
+                int getCurrentID = recipeLists.get(0).getId();
+                for (SpoonacularObjects objects : recipeLists){
+                    Log.d(TAG, "Object in list: "+ objects.getId() + " and "+ getCurrentID);
+                }
+
+
+                //int recipe = recipeLists.get(0).getId();
+                String image = recipeLists.get(0).getImage();
+                recipeId.putInt(FoodListsMainFragment.RECIPEID_KEY, getCurrentID);
+                recipeId.putString(FoodListsMainFragment.IMAGE_KEY, image);
+
+
+                Fragment ingredients = new IngredientsFragment();
+                ingredients.setArguments(recipeId);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container_id, ingredients);
+                transaction.commit();
+
 
                 Timber.i("Clicked!");
             }
@@ -137,23 +181,24 @@ public class SwipeItemActivity extends Fragment {
     return v;
 }
 
-    @OnClick(R.id.right)
     public void right() {
         /**
          * Trigger the right event manually.
          */
         flingContainer.getTopCardListener().selectRight();
+        Timber.i("Saved");
+        recipeLists.remove(0);
+        adapter.notifyDataSetChanged();
     }
 
-    @OnClick(R.id.left)
     public void left() {
         flingContainer.getTopCardListener().selectLeft();
+        recipeLists.remove(0);
+        adapter.notifyDataSetChanged();
+        Timber.i("Not like");
+
     }
 
-
-    private void setViews(View v){
-        flingContainer = (SwipeFlingAdapterView) v.findViewById(R.id.frame);
-    }
 
 
 
@@ -175,6 +220,8 @@ public class SwipeItemActivity extends Fragment {
                 if (spoonacularResults == null) {
                     return;
                 }
+
+
 
                 Collections.addAll(recipeLists, spoonacularResults.getResults());
                 adapter.notifyDataSetChanged();
