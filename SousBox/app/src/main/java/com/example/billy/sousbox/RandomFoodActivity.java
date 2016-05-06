@@ -33,6 +33,10 @@ import timber.log.Timber;
 
 public class RandomFoodActivity extends AppCompatActivity {
 
+    /**
+     * don't need to do this anymore... keep for backup...
+     */
+
 
     private LinkedList<SpoonacularObjects> recipeLists;
     private CardAdapter adapter;

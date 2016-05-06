@@ -74,7 +74,7 @@ public class FoodListsMainFragment extends Fragment {
                 Timber.i(String.valueOf(position));
                 recipeLists.get(position);
 
-                Bundle recipeId = new Bundle(); //will bundle the 5 fields of newsWireObjects in a string array
+                Bundle recipeId = new Bundle();
                 int recipe = recipeLists.get(position).getId();
                 String image = recipeLists.get(position).getImage();
                 recipeId.putInt(RECIPEID_KEY, recipe);

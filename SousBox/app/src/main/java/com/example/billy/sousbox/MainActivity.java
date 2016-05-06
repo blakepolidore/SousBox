@@ -96,41 +96,41 @@ public class MainActivity extends AppCompatActivity {
     private void bottomNavi(){
         AHBottomNavigation bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
 
-// Create items
+        // Create items
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.tab_1, R.drawable.ic_menu_gallery, R.color.colorPrimary);
         AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.tab_2, R.drawable.ic_menu_share, R.color.colorPrimaryDark);
         AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.tab_3, R.drawable.ic_menu_manage, R.color.colorAccent);
-        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.tab_3, R.drawable.ic_menu_manage, R.color.colorPrimary);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.tab_4, R.drawable.ic_menu_manage, R.color.colorPrimary);
 
-// Add items
+        // Add items
         bottomNavigation.addItem(item1);
         bottomNavigation.addItem(item2);
         bottomNavigation.addItem(item3);
         bottomNavigation.addItem(item4);
 
-// Set background color
+        // Set background color
         bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
 
-// Disable the translation inside the CoordinatorLayout
+        // Disable the translation inside the CoordinatorLayout
         bottomNavigation.setBehaviorTranslationEnabled(false);
 
-// Change colors
+        // Change colors
         bottomNavigation.setAccentColor(Color.parseColor("#F63D2B"));
         bottomNavigation.setInactiveColor(Color.parseColor("#747474"));
 
-// Force to tint the drawable (useful for font with icon for example)
+        // Force to tint the drawable (useful for font with icon for example)
         bottomNavigation.setForceTint(true);
 
-// Force the titles to be displayed (against Material Design guidelines!)
+        // Force the titles to be displayed (against Material Design guidelines!)
         bottomNavigation.setForceTitlesDisplay(true);
 
-// Use colored navigation with circle reveal effect
+        // Use colored navigation with circle reveal effect
         bottomNavigation.setColored(true);
 
-// Set current item programmatically
+        // Set current item programmatically
         bottomNavigation.setCurrentItem(0);
 
-// Set listener
+        // Set listener
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, boolean wasSelected) {
@@ -140,8 +140,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(position ==1) {
-//                    Intent intent = new Intent(MainActivity.this, RandomFoodActivity.class);
-//                    startActivity(intent);
+    //              Intent intent = new Intent(MainActivity.this, RandomFoodActivity.class);
+    //              startActivity(intent);
 
                     swipeItemActivityFrag = new SwipeItemFragment();
                     fragmentTransaction = fragmentManager.beginTransaction();
@@ -154,10 +154,8 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_container_id, faceBookLoginFrag);
                     fragmentTransaction.commit();
-
                 }
 
-                // Do something cool here...
             }
         });
 

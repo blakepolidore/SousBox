@@ -8,6 +8,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/ingredients_progress_bar_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleLarge"
+        android:visibility="visible"/>
 
         <ImageView
             android:id="@+id/ingredients_imageView_id"
@@ -21,6 +27,14 @@
             android:id="@+id/ingredients_titleView_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/instruction_button_id"
+            android:text="@string/instructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
 
         <ListView
             android:id="@+id/ingredients_listView_id"
