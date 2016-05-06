@@ -1,6 +1,5 @@
 package com.example.billy.sousbox;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -14,9 +13,9 @@ import android.widget.FrameLayout;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 //import com.example.billy.sousbox.flingsswipe.SwipeFlingAdapterView;
-import com.example.billy.sousbox.fragments.LoginActivityFragment;
-import com.example.billy.sousbox.fragments.FoodListsMainActivity;
-import com.example.billy.sousbox.fragments.SwipeItemActivity;
+import com.example.billy.sousbox.fragments.LoginFragment;
+import com.example.billy.sousbox.fragments.FoodListsMainFragment;
+import com.example.billy.sousbox.fragments.SwipeItemFragment;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 //import com.bumptech.glide.Glide;
@@ -29,9 +28,9 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private FrameLayout fragContainer;
-    private FoodListsMainActivity recipeListsFrag;
-    private LoginActivityFragment faceBookLoginFrag;
-    private SwipeItemActivity swipeItemActivityFrag;
+    private FoodListsMainFragment recipeListsFrag;
+    private LoginFragment faceBookLoginFrag;
+    private SwipeItemFragment swipeItemActivityFrag;
 
 
     @Override
@@ -59,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initiViews(){
         fragContainer = (FrameLayout)findViewById(R.id.fragment_container_id);
-        recipeListsFrag = new FoodListsMainActivity();
-        faceBookLoginFrag = new LoginActivityFragment();
+        recipeListsFrag = new FoodListsMainFragment();
+        faceBookLoginFrag = new LoginFragment();
         fragmentManager = getSupportFragmentManager();
 
 
@@ -141,11 +140,17 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(position ==1) {
-                    Intent intent = new Intent(MainActivity.this, RandomFoodActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(MainActivity.this, RandomFoodActivity.class);
+//                    startActivity(intent);
+
+                    swipeItemActivityFrag = new SwipeItemFragment();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container_id, swipeItemActivityFrag);
+                    fragmentTransaction.commit();
+
                 }
                 if(position ==2) {
-                    faceBookLoginFrag = new LoginActivityFragment();
+                    faceBookLoginFrag = new LoginFragment();
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_container_id, faceBookLoginFrag);
                     fragmentTransaction.commit();

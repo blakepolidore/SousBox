@@ -16,12 +16,9 @@ import com.example.billy.sousbox.api.GetRecipeObjects;
 import com.example.billy.sousbox.api.RecipeAPI;
 import com.example.billy.sousbox.api.SpoonGetRecipe;
 import com.example.billy.sousbox.api.SpoonacularObjects;
-import com.example.billy.sousbox.api.SpoonacularResults;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by Billy on 5/3/16.
  */
-public class IngredientsActivity extends Fragment {
+public class IngredientsFragment extends Fragment {
 
     ArrayList<String> ingredientLists;
     ArrayAdapter adapter;
@@ -72,8 +69,8 @@ public class IngredientsActivity extends Fragment {
         searchAPI = retrofit.create(RecipeAPI.class);
 
         Bundle bundle = getArguments();
-        id = bundle.getInt(FoodListsMainActivity.RECIPEID_KEY);
-        image = bundle.getString(FoodListsMainActivity.IMAGE_KEY);
+        id = bundle.getInt(FoodListsMainFragment.RECIPEID_KEY);
+        image = bundle.getString(FoodListsMainFragment.IMAGE_KEY);
 
 
         Call<GetRecipeObjects> call = searchAPI.getRecipeIngredients(id);

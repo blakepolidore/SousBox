@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.example.billy.sousbox.Keys.Keys;
@@ -16,11 +15,10 @@ import com.example.billy.sousbox.adapters.CardAdapter;
 import com.example.billy.sousbox.api.RecipeAPI;
 import com.example.billy.sousbox.api.SpoonacularObjects;
 import com.example.billy.sousbox.api.SpoonacularResults;
-import com.example.billy.sousbox.fragments.FoodListsMainActivity;
-import com.example.billy.sousbox.fragments.IngredientsActivity;
+import com.example.billy.sousbox.fragments.FoodListsMainFragment;
+import com.example.billy.sousbox.fragments.IngredientsFragment;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -52,7 +50,7 @@ public class RandomFoodActivity extends AppCompatActivity {
     SwipeFlingAdapterView flingContainer;
     FragmentTransaction transaction;
     FragmentManager fragmentManager;
-    IngredientsActivity ingredientsActivityfrag;
+    IngredientsFragment ingredientsActivityfrag;
 
 
     @Override
@@ -129,14 +127,14 @@ public class RandomFoodActivity extends AppCompatActivity {
                 Intent intent = new Intent(RandomFoodActivity.this, MainActivity.class);
 
 
-                Bundle recipeId = new Bundle(); //will bundle the 5 fields of newsWireObjects in a string array
+                Bundle recipeId = new Bundle(); //will bundle
                 int recipe = recipeLists.get(itemPosition).getId();
                 String image = recipeLists.get(itemPosition).getImage();
-                recipeId.putInt(FoodListsMainActivity.RECIPEID_KEY, recipe);
-                recipeId.putString(FoodListsMainActivity.IMAGE_KEY, image);
+                recipeId.putInt(FoodListsMainFragment.RECIPEID_KEY, recipe);
+                recipeId.putString(FoodListsMainFragment.IMAGE_KEY, image);
 
 
-                Fragment ingredients = new IngredientsActivity();
+                Fragment ingredients = new IngredientsFragment();
                 ingredients.setArguments(recipeId);
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragment_container_id, ingredients);

@@ -22,7 +22,7 @@ import com.facebook.login.widget.LoginButton;
 /**
  * Created by Billy on 5/2/16.
  */
-public class LoginActivityFragment extends Fragment {
+public class LoginFragment extends Fragment {
 
     private TextView info;
     private LoginButton loginButton;
@@ -30,7 +30,7 @@ public class LoginActivityFragment extends Fragment {
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private FrameLayout fragContainer;
-    private FoodListsMainActivity recipeListsFrag;
+    private FoodListsMainFragment recipeListsFrag;
 
 
     @Nullable
@@ -44,7 +44,7 @@ public class LoginActivityFragment extends Fragment {
         loginButton.setFragment(this);
         info = (TextView)v.findViewById(R.id.info);
         fragContainer = (FrameLayout)v.findViewById(R.id.fragment_container_id);
-        recipeListsFrag = new FoodListsMainActivity();
+        recipeListsFrag = new FoodListsMainFragment();
         fragmentManager = getFragmentManager();
 
 

@@ -1,13 +1,11 @@
 package com.example.billy.sousbox.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +29,7 @@ import timber.log.Timber;
 /**
  * Created by Billy on 5/4/16.
  */
-public class FoodListsMainActivity extends Fragment {
+public class FoodListsMainFragment extends Fragment {
 
     private RecycleViewAdatper recycleAdapter;
     private RecyclerView recyclerView;
@@ -83,7 +81,7 @@ public class FoodListsMainActivity extends Fragment {
                 recipeId.putString(IMAGE_KEY, image);
 
 
-                Fragment ingredients = new IngredientsActivity();
+                Fragment ingredients = new IngredientsFragment();
                 ingredients.setArguments(recipeId);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container_id, ingredients);
