@@ -112,14 +112,11 @@ public class PreferencesFragment extends Fragment {
          * user and hide hide any login buttons *//*
         mFirebaseRef.addAuthStateListener(mAuthStateListener);*/
 
-        //recipeListsFrag = new FoodListsMainFragment();
         initiViews(v);
         facebookLogin();
         recipeListsFrag = new FoodListsMainFragment();
         queryFilters = new QueryFilters();
         initiCheckboxClicks();
-
-       // setFilters();
 
         return v;
     }
@@ -135,6 +132,7 @@ public class PreferencesFragment extends Fragment {
 
         fragContainer = (FrameLayout)v.findViewById(R.id.fragment_container_id);
         fragmentManager = getFragmentManager();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         beefCheckBox = (CheckBox)v.findViewById(R.id.beef_checkbox_id);
         porkCheckBox = (CheckBox)v.findViewById(R.id.pork_checkbox_id);
@@ -143,68 +141,14 @@ public class PreferencesFragment extends Fragment {
         vegetarianCheckBox = (CheckBox)v.findViewById(R.id.vege_checkout_id);
         allTypeCheckBox = (CheckBox)v.findViewById(R.id.allType_checkbox_id);
 
-
     }
 
-
-    /**
-     * setup preference fragment to show up first then it will be easy to do the filters!
-     */
-
-    private void setFilters(){
-
-/*
-
-                switch (v.getId()) {
-                    case R.id.beef_checkbox_id:
-                        if (checked) {
-                            String beefFilter = "beef";
-                            filterBundle.putString(FILTER_KEY, beefFilter);
-                        }
-                        break;
-                    case R.id.pork_checkbox_id:
-                        if (checked) {
-                            String porkFilter = "pork";
-                            filterBundle.putString(FILTER_KEY, porkFilter);
-                        }
-                        break;
-                    case R.id.chicken_checkbox_id:
-                        if (checked) {
-                            String chickenFilter = "chicken";
-                            filterBundle.putString(FILTER_KEY, chickenFilter);
-                        }
-                        break;
-                    case R.id.vege_checkout_id:
-                        if (checked) {
-                            String vegeFilter = "vegetarian";
-                            filterBundle.putString(FILTER_KEY, vegeFilter);
-                        }
-                        break;
-                    case R.id.seafood_checkout_id:
-                        if (checked) {
-                            String seafoodFilter = "seafoods";
-                            filterBundle.putString(FILTER_KEY, seafoodFilter);
-                        }
-                        break;
-
-                    default:
-                        String allType = "beef,chicken,pork,vegetarian,seafoods";
-                        filterBundle.putString(FILTER_KEY, allType);
-                    }
-//                Fragment fragment = new Fragment();
-//                fragment.setArguments(filterBundle);
-            }
-        });
-*/
-
-    }
 
 
     private void onCheckboxClicked(final View view) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
                 boolean checked = ((CheckBox) view).isChecked();
 
@@ -212,7 +156,6 @@ public class PreferencesFragment extends Fragment {
                     case R.id.beef_checkbox_id:
                         if (checked) {
                             beefCheck = true;
-                            Bundle filterBundle = new Bundle();
                             String beefFilter = "beef";
                             setSearchFilter(beefFilter);
                         } else {
@@ -230,7 +173,6 @@ public class PreferencesFragment extends Fragment {
                         } else {
                             chickenCheck = false;
                             setSearchFilter("");
-
                         }
                         break;
                     case R.id.pork_checkbox_id:
@@ -241,7 +183,6 @@ public class PreferencesFragment extends Fragment {
                         } else {
                             porkCheck = false;
                             setSearchFilter("");
-
                         }
                         break;
                     case R.id.vege_checkout_id:
@@ -249,11 +190,9 @@ public class PreferencesFragment extends Fragment {
                             vegetarianCheck = true;
                             String vegeFilter = "vegetarian";
                             setSearchFilter(vegeFilter);
-
                         } else {
                             vegetarianCheck = false;
                             setSearchFilter("");
-
                         }
                         break;
                     case R.id.seafood_checkout_id:
@@ -261,11 +200,9 @@ public class PreferencesFragment extends Fragment {
                             seafoodCheck = true;
                             String seafoodFilter = "seafood";
                             setSearchFilter(seafoodFilter);
-
                         } else {
                             seafoodCheck = false;
                             setSearchFilter("");
-
                         }
                         break;
 
@@ -277,21 +214,17 @@ public class PreferencesFragment extends Fragment {
                         } else {
                             allTypeCheck = false;
                             setSearchFilter("");
-
                         }
                         break;
                     default:
                         setSearchFilter("");
-
-                        // recipeListsFrag.setQuerySearch(allType);
-
                 }
             }
         });
     }
 
     private void setSearchFilter(String filterName){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(Shared_FILTER_KEY, filterName);
         editor.commit();
@@ -322,7 +255,6 @@ public class PreferencesFragment extends Fragment {
         editor.putBoolean(ALL_TYPE_CODE, allTypeCheck);
         editor.putBoolean(SEAFOOD_CODE, seafoodCheck);
         editor.putBoolean(VEGETARIAN_CODE, vegetarianCheck);
-
         editor.commit();
     }
 

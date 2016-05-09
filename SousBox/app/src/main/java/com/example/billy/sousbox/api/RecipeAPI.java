@@ -26,9 +26,8 @@ public interface RecipeAPI {
 //                                                @Query("query")String q);
 
     @Headers("X-Mashape-Key: " + Keys.MASHAPLE)
-    @GET("search?limitLicense=false&number=100&offset={limit}&")
-    Call<SpoonacularResults> searchMoreRecipe(@Path("limit")int offset,
-                                                @Query("query")String q);
+    @GET("search?limitLicense=false&number=100&offset=100&")
+    Call<SpoonacularResults> searchMoreRecipe(@Query("query")String q);
 
     @Headers("X-Mashape-Key: " + Keys.MASHAPLE)
     @GET("{id}/information")

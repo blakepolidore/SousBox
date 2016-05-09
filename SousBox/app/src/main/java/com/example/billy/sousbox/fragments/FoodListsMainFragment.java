@@ -37,24 +37,23 @@ public class FoodListsMainFragment extends Fragment {
 
     private RecycleViewAdatper recycleAdapter;
     private RecyclerView recyclerView;
-    private RecipeAPI foodRecipePulling;
     private ArrayList<SpoonacularObjects> recipeLists;
+    private String querySearch;
+    private RecipeAPI searchAPI;
+
     public final static String RECIPE_ID_KEY = "recipeID";
     public final static String IMAGE_KEY = "image";
-    private String querySearch;
-    private int numberOfRecipe = 30;
-    private RecipeAPI searchAPI;
-    private String cuisine = "chinese";
-    QueryFilters queryFilters;
 
 
+    // tried to make setter for my filter system, not working.. delete later
     public void setQuerySearch(String querySearch) {
         this.querySearch = querySearch;
     }
-
     public String getQuerySearch() {
         return querySearch;
     }
+
+
 
     @Nullable
     @Override
@@ -62,7 +61,8 @@ public class FoodListsMainFragment extends Fragment {
         View v = inflater.inflate(R.layout.food_recipe_recycleview, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recipeLists_recycleView_id);
         recipeLists = new ArrayList<>();
-        //
+
+
         //querySearch = queryFilters.getQuery();
         Bundle filterBundle = getArguments();
         //String getType = filterBundle.getString(PreferencesFragment.FILTER_KEY);
@@ -86,11 +86,6 @@ public class FoodListsMainFragment extends Fragment {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         return sharedPreferences.getString(PreferencesFragment.Shared_FILTER_KEY, "");
     }
-
-    private void setFilterQuery(){
-
-    }
-
 
     /**
      * Set the itemClicker for the recycleView
