@@ -1,5 +1,6 @@
 package com.example.billy.sousbox;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -16,8 +17,11 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.example.billy.sousbox.fragments.PreferencesFragment;
 import com.example.billy.sousbox.fragments.FoodListsMainFragment;
 import com.example.billy.sousbox.fragments.SwipeItemFragment;
+import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+
+import timber.log.Timber;
 //import com.bumptech.glide.Glide;
 
 
@@ -31,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private FoodListsMainFragment recipeListsFrag;
     private PreferencesFragment preferencesFragment;
     private SwipeItemFragment swipeItemActivityFrag;
-
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +45,19 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
-        initiViews();
 
+
+        initiViews();
         initiFragment();
         bottomNavi();
 
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        Timber.i("inside activity Result");
     }
 
     private void initiFragment(){
@@ -59,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initiViews(){
+        callbackManager = CallbackManager.Factory.create();
         fragContainer = (FrameLayout)findViewById(R.id.fragment_container_id);
         recipeListsFrag = new FoodListsMainFragment();
         preferencesFragment = new PreferencesFragment();

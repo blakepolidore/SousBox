@@ -27,6 +27,7 @@ public class RecycleViewAdatper extends RecyclerView.Adapter<RecycleViewAdatper.
     private static OnItemClickListener listener;
 
 
+
     public RecycleViewAdatper(ArrayList<SpoonacularObjects> data) {
         this.data = data;
     }
@@ -80,6 +81,7 @@ public class RecycleViewAdatper extends RecyclerView.Adapter<RecycleViewAdatper.
                 .resize(300, 300)
                 .centerCrop()
                 .into(holder.recipeImageView);
+
 
     }
 

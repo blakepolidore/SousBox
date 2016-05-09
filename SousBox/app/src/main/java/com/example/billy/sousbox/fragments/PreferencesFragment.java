@@ -1,6 +1,7 @@
 package com.example.billy.sousbox.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,8 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
+
 import com.example.billy.sousbox.R;
 import com.example.billy.sousbox.api.QueryFilters;
 import com.facebook.AccessToken;
@@ -38,8 +42,6 @@ import timber.log.Timber;
  * Created by Billy on 5/2/16.
  */
 public class PreferencesFragment extends Fragment {
-
-
 
     private TextView info;
     private Button saveButton;
@@ -92,9 +94,20 @@ public class PreferencesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.preferences_layout_fragment, container, false);
-        FacebookSdk.sdkInitialize(v.getContext());
+        FacebookSdk.sdkInitialize(getContext());
         callbackManager = CallbackManager.Factory.create();
-/*
+        initiViews(v);
+        loginButton.setFragment(this);
+        facebookLogin();
+        recipeListsFrag = new FoodListsMainFragment();
+        queryFilters = new QueryFilters();
+        initiCheckboxClicks();
+        fireBase();
+
+        return v;
+    }
+
+    private void fireBase(){
         mAuthProgressDialog = new ProgressDialog(getContext());
         mAuthProgressDialog.setTitle("Loading");
         mAuthProgressDialog.setMessage("Authenticating with Firebase...");
@@ -108,19 +121,17 @@ public class PreferencesFragment extends Fragment {
                 setAuthenticatedUser(authData);
             }
         };
-        *//* Check if the user is authenticated with Firebase already. If this is the case we can set the authenticated
-         * user and hide hide any login buttons *//*
-        mFirebaseRef.addAuthStateListener(mAuthStateListener);*/
+//         Check if the user is authenticated with Firebase already. If this is the case we can set the authenticated
+//         * user and hide hide any login buttons
+        mFirebaseRef.addAuthStateListener(mAuthStateListener);
 
-        initiViews(v);
-        facebookLogin();
-        recipeListsFrag = new FoodListsMainFragment();
-        queryFilters = new QueryFilters();
-        initiCheckboxClicks();
-
-        return v;
     }
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        Timber.i("inside activity Result");
+    }
 
 
     private void initiViews(View v){
@@ -128,7 +139,7 @@ public class PreferencesFragment extends Fragment {
         loginButton = (LoginButton)v.findViewById(R.id.login_button);
         loginButton.setFragment(this);
         info = (TextView)v.findViewById(R.id.info);
-        saveButton = (Button)v.findViewById(R.id.filter_save_button_id);
+        mFirebaseRef = new Firebase("https://sous-box.firebaseio.com");
 
         fragContainer = (FrameLayout)v.findViewById(R.id.fragment_container_id);
         fragmentManager = getFragmentManager();
@@ -143,8 +154,10 @@ public class PreferencesFragment extends Fragment {
 
     }
 
-
-
+    /**
+     * listen to checkbox, saved it and set the filter
+     * @param view
+     */
     private void onCheckboxClicked(final View view) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,9 +171,14 @@ public class PreferencesFragment extends Fragment {
                             beefCheck = true;
                             String beefFilter = "beef";
                             setSearchFilter(beefFilter);
+                            porkCheckBox.setEnabled(false);
+                            chickenCheckBox.setEnabled(false);
+
                         } else {
                             beefCheck = false;
                             setSearchFilter("");
+                            porkCheckBox.setEnabled(true);
+                            chickenCheckBox.setEnabled(true);
                         }
                         break;
                     case R.id.chicken_checkbox_id:
@@ -280,44 +298,53 @@ public class PreferencesFragment extends Fragment {
 
     }
 
+    private boolean isFacebookLoggedIn(){
+        return AccessToken.getCurrentAccessToken() !=null;
+    }
+
     private void facebookLogin(){
 
-        mFacebookAccessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                Timber.i("Facebook.AccessTokenTracker.OnCurrentAccessTokenChanged");
-                PreferencesFragment.this.onFacebookAccessTokenChange(currentAccessToken);
-            }
-        };
+        if(!isFacebookLoggedIn()) {
+            mFacebookAccessTokenTracker = new AccessTokenTracker() {
+                @Override
+                protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                    Timber.i("Facebook.AccessTokenTracker.OnCurrentAccessTokenChanged");
+                    PreferencesFragment.this.onFacebookAccessTokenChange(currentAccessToken);
+                }
+            };
 
 
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                info.setText("User ID: " + loginResult.getAccessToken().getUserId()
-                        //+ "\n" +
-                        // "Auth Token: "
-                        // + loginResult.getAccessToken().getToken()
-                );
+            loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+//                    info.setText("User ID: " + loginResult.getAccessToken().getUserId()
+//                                    + "\n" +
+//                                    "Auth Token: "
+//                                    + loginResult.getAccessToken().getToken()
+//                    );
+                    //Toast.makeText(getActivity(), "You are logged in",Toast.LENGTH_SHORT).show();
 
 //                fragmentTransaction = fragmentManager.beginTransaction();
 //                fragmentTransaction.replace(R.id.fragment_container_id, recipeListsFrag);
 //                fragmentTransaction.commit();
-            }
+                }
 
-            @Override
-            public void onCancel() {
-                info.setText("Login attempt canceled.");
-            }
+                @Override
+                public void onCancel() {
+                    info.setText("Login attempt canceled.");
+                }
 
-            @Override
-            public void onError(FacebookException e) {
-                info.setText("Login attempt failed.");
-            }
-        });
+                @Override
+                public void onError(FacebookException e) {
+                    info.setText("Login attempt failed.");
+                    e.printStackTrace();
+                }
+            });
+
+        } else {
+            Timber.d("logged in");
+        }
     }
-
-
 
     private void onFacebookAccessTokenChange(AccessToken token) {
         if (token != null) {
@@ -327,7 +354,7 @@ public class PreferencesFragment extends Fragment {
             // Logged out of Facebook and currently authenticated with Firebase using Facebook, so do a logout
             if (this.mAuthData != null && this.mAuthData.getProvider().equals("facebook")) {
                 mFirebaseRef.unauth();
-                //setAuthenticatedUser(null);
+                setAuthenticatedUser(null);
             }
         }
     }
@@ -375,7 +402,7 @@ public class PreferencesFragment extends Fragment {
     private void setAuthenticatedUser(AuthData authData) {
         if (authData != null) {
             /* Hide all the login buttons */
-            loginButton.setVisibility(View.GONE);
+            //loginButton.setVisibility(View.GONE);
 
             /* show a provider specific status text */
             String name = null;
@@ -432,11 +459,6 @@ public class PreferencesFragment extends Fragment {
             mAuthProgressDialog.hide();
             showErrorDialog(firebaseError.toString());
         }
-    }
-
-    private void loginAnonymously() {
-        mAuthProgressDialog.show();
-        mFirebaseRef.authAnonymously(new AuthResultHandler("anonymous"));
     }
 
 }
