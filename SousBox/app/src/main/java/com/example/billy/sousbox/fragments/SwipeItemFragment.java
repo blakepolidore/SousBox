@@ -18,6 +18,8 @@ import com.example.billy.sousbox.adapters.CardAdapter;
 import com.example.billy.sousbox.api.RecipeAPI;
 import com.example.billy.sousbox.api.SpoonacularObjects;
 import com.example.billy.sousbox.api.SpoonacularResults;
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -54,15 +56,19 @@ public class SwipeItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.swipe_recipe_fragment, container, false);
-
         ButterKnife.inject(getActivity());
         recipeLists = new ArrayList<>();
         foodType = getSearchFilter();
         retrofitRecipe();
+
         flingContainer = (SwipeFlingAdapterView) v.findViewById(R.id.frame);
         left = (Button) v.findViewById(R.id.left);
         right = (Button) v.findViewById(R.id.right);
+
         initiButtons();
+
+
+
 
         adapter = new CardAdapter(getContext(), recipeLists);
         flingContainer.setAdapter(adapter);
@@ -250,4 +256,10 @@ public class SwipeItemFragment extends Fragment {
     }
 
 
+    private String getAuthData() {
+        Firebase firebase = new Firebase("https://sous-box.firebaseio.com");
+        AuthData authData = firebase.getAuth();
+        String userID = authData.getUid();
+        return userID;
+    }
 }

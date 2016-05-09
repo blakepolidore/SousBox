@@ -102,7 +102,6 @@ public class PreferencesFragment extends Fragment {
         recipeListsFrag = new FoodListsMainFragment();
         queryFilters = new QueryFilters();
         initiCheckboxClicks();
-        fireBase();
 
         return v;
     }
@@ -126,6 +125,18 @@ public class PreferencesFragment extends Fragment {
         mFirebaseRef.addAuthStateListener(mAuthStateListener);
 
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // if user logged in with Facebook, stop tracking their token
+        if (mFacebookAccessTokenTracker != null) {
+            mFacebookAccessTokenTracker.stopTracking();
+        }
+        // if changing configurations, stop tracking firebase session.
+        mFirebaseRef.removeAuthStateListener(mAuthStateListener);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -173,24 +184,39 @@ public class PreferencesFragment extends Fragment {
                             setSearchFilter(beefFilter);
                             porkCheckBox.setEnabled(false);
                             chickenCheckBox.setEnabled(false);
+                            seafoodCheckbox.setEnabled(false);
+                            vegetarianCheckBox.setEnabled(false);
+                            allTypeCheckBox.setEnabled(false);
 
-                        } else {
+                        } if (!checked) {
                             beefCheck = false;
                             setSearchFilter("");
                             porkCheckBox.setEnabled(true);
                             chickenCheckBox.setEnabled(true);
+                            seafoodCheckbox.setEnabled(true);
+                            vegetarianCheckBox.setEnabled(true);
+                            allTypeCheckBox.setEnabled(true);
                         }
                         break;
                     case R.id.chicken_checkbox_id:
                         if (checked) {
                             chickenCheck = true;
-//                            Bundle filterBundle = new Bundle();
                             String chickenFilter = "chicken";
                             setSearchFilter(chickenFilter);
-//                            recipeListsFrag.setQuerySearch(chickenFilter);
+                            porkCheckBox.setEnabled(false);
+                            beefCheckBox.setEnabled(false);
+                            seafoodCheckbox.setEnabled(false);
+                            vegetarianCheckBox.setEnabled(false);
+                            allTypeCheckBox.setEnabled(false);
+
                         } else {
                             chickenCheck = false;
                             setSearchFilter("");
+                            porkCheckBox.setEnabled(true);
+                            beefCheckBox.setEnabled(true);
+                            seafoodCheckbox.setEnabled(true);
+                            vegetarianCheckBox.setEnabled(true);
+                            allTypeCheckBox.setEnabled(true);
                         }
                         break;
                     case R.id.pork_checkbox_id:
@@ -198,9 +224,20 @@ public class PreferencesFragment extends Fragment {
                             porkCheck = true;
                             String porkFilter = "pork";
                             setSearchFilter(porkFilter);
+                            chickenCheckBox.setEnabled(false);
+                            beefCheckBox.setEnabled(false);
+                            seafoodCheckbox.setEnabled(false);
+                            vegetarianCheckBox.setEnabled(false);
+                            allTypeCheckBox.setEnabled(false);
+
                         } else {
                             porkCheck = false;
                             setSearchFilter("");
+                            chickenCheckBox.setEnabled(true);
+                            beefCheckBox.setEnabled(true);
+                            seafoodCheckbox.setEnabled(true);
+                            vegetarianCheckBox.setEnabled(true);
+                            allTypeCheckBox.setEnabled(true);
                         }
                         break;
                     case R.id.vege_checkout_id:
@@ -208,9 +245,19 @@ public class PreferencesFragment extends Fragment {
                             vegetarianCheck = true;
                             String vegeFilter = "vegetarian";
                             setSearchFilter(vegeFilter);
+                            porkCheckBox.setEnabled(false);
+                            beefCheckBox.setEnabled(false);
+                            seafoodCheckbox.setEnabled(false);
+                            chickenCheckBox.setEnabled(false);
+                            allTypeCheckBox.setEnabled(false);
                         } else {
                             vegetarianCheck = false;
                             setSearchFilter("");
+                            porkCheckBox.setEnabled(true);
+                            beefCheckBox.setEnabled(true);
+                            seafoodCheckbox.setEnabled(true);
+                            chickenCheckBox.setEnabled(true);
+                            allTypeCheckBox.setEnabled(true);
                         }
                         break;
                     case R.id.seafood_checkout_id:
@@ -218,9 +265,19 @@ public class PreferencesFragment extends Fragment {
                             seafoodCheck = true;
                             String seafoodFilter = "seafood";
                             setSearchFilter(seafoodFilter);
+                            porkCheckBox.setEnabled(false);
+                            beefCheckBox.setEnabled(false);
+                            chickenCheckBox.setEnabled(false);
+                            vegetarianCheckBox.setEnabled(false);
+                            allTypeCheckBox.setEnabled(false);
                         } else {
                             seafoodCheck = false;
                             setSearchFilter("");
+                            porkCheckBox.setEnabled(true);
+                            beefCheckBox.setEnabled(true);
+                            chickenCheckBox.setEnabled(true);
+                            vegetarianCheckBox.setEnabled(true);
+                            allTypeCheckBox.setEnabled(true);
                         }
                         break;
 
@@ -229,9 +286,21 @@ public class PreferencesFragment extends Fragment {
                             allTypeCheck = true;
                             String allTypeFilter = "";
                             setSearchFilter(allTypeFilter);
+                            porkCheckBox.setEnabled(false);
+                            beefCheckBox.setEnabled(false);
+                            seafoodCheckbox.setEnabled(false);
+                            vegetarianCheckBox.setEnabled(false);
+                            chickenCheckBox.setEnabled(false);
+
+
                         } else {
                             allTypeCheck = false;
                             setSearchFilter("");
+                            porkCheckBox.setEnabled(true);
+                            beefCheckBox.setEnabled(true);
+                            seafoodCheckbox.setEnabled(true);
+                            vegetarianCheckBox.setEnabled(true);
+                            chickenCheckBox.setEnabled(true);
                         }
                         break;
                     default:
@@ -240,6 +309,8 @@ public class PreferencesFragment extends Fragment {
             }
         });
     }
+
+
 
     private void setSearchFilter(String filterName){
 //        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -313,10 +384,11 @@ public class PreferencesFragment extends Fragment {
                 }
             };
 
-
             loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
+
+                    fireBase();
 //                    info.setText("User ID: " + loginResult.getAccessToken().getUserId()
 //                                    + "\n" +
 //                                    "Auth Token: "
@@ -340,7 +412,6 @@ public class PreferencesFragment extends Fragment {
                     e.printStackTrace();
                 }
             });
-
         } else {
             Timber.d("logged in");
         }
@@ -355,6 +426,7 @@ public class PreferencesFragment extends Fragment {
             if (this.mAuthData != null && this.mAuthData.getProvider().equals("facebook")) {
                 mFirebaseRef.unauth();
                 setAuthenticatedUser(null);
+
             }
         }
     }
