@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTransaction fragmentTransaction;
     private FrameLayout fragContainer;
     private FoodListsMainFragment recipeListsFrag;
-    private PreferencesFragment faceBookLoginFrag;
+    private PreferencesFragment preferencesFragment;
     private SwipeItemFragment swipeItemActivityFrag;
 
 
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         initiViews();
+
         initiFragment();
         bottomNavi();
 
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private void initiFragment(){
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.replace(R.id.fragment_container_id, recipeListsFrag);
+        fragmentTransaction.replace(R.id.fragment_container_id, preferencesFragment);
         fragmentTransaction.commit();
 
     }
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private void initiViews(){
         fragContainer = (FrameLayout)findViewById(R.id.fragment_container_id);
         recipeListsFrag = new FoodListsMainFragment();
-        faceBookLoginFrag = new PreferencesFragment();
+        preferencesFragment = new PreferencesFragment();
         fragmentManager = getSupportFragmentManager();
 
 
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -87,11 +88,17 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+
+
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     private void bottomNavi(){
         AHBottomNavigation bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
@@ -128,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.setColored(true);
 
         // Set current item programmatically
-        bottomNavigation.setCurrentItem(0);
+        bottomNavigation.setCurrentItem(2);
 
         // Set listener
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
@@ -136,7 +143,11 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(int position, boolean wasSelected) {
 
                 if(position ==0) {
-                 initiFragment();
+                    recipeListsFrag = new FoodListsMainFragment();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.replace(R.id.fragment_container_id, recipeListsFrag);
+                    fragmentTransaction.commit();
                 }
 
                 if(position ==1) {
@@ -150,10 +161,10 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 if(position ==2) {
-                    faceBookLoginFrag = new PreferencesFragment();
+                    preferencesFragment = new PreferencesFragment();
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.replace(R.id.fragment_container_id, faceBookLoginFrag);
+                    fragmentTransaction.replace(R.id.fragment_container_id, preferencesFragment);
                     fragmentTransaction.commit();
                 }
 

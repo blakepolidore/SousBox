@@ -84,7 +84,7 @@ public class IngredientsFragment extends Fragment {
         searchAPI = retrofit.create(RecipeAPI.class);
 
         Bundle bundle = getArguments();
-        id = bundle.getInt(FoodListsMainFragment.RECIPEID_KEY);
+        id = bundle.getInt(FoodListsMainFragment.RECIPE_ID_KEY);
         image = bundle.getString(FoodListsMainFragment.IMAGE_KEY);
 
 
@@ -107,8 +107,8 @@ public class IngredientsFragment extends Fragment {
                 }
                 Picasso.with(getContext())
                         .load("https://webknox.com/recipeImages/" + imageURI)
-                        .resize(500, 500)
-                        .centerCrop()
+//                        .resize(500, 500)
+//                        .centerCrop()
                         .into(recipeImage);
 
                 ingredientLists = new ArrayList<>();

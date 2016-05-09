@@ -1,10 +1,11 @@
 package com.example.billy.sousbox.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,9 @@ public class SwipeItemFragment extends Fragment {
     RecipeAPI searchAPI;
     public final static String MASHAPLE_HEADER = Keys.getMASHAPLE();
     private String CHINESE = "chinese";
-    private String foodType = "beef, pork, chicken, seafood";
+    private String foodType;
     private int OFFSET = 100;
+    String query;
 
     SpoonacularObjects spoonRecipe;
 
@@ -68,6 +70,7 @@ public class SwipeItemFragment extends Fragment {
         right = (Button) v.findViewById(R.id.right);
         initiButtons();
 
+        foodType = getSearchFilter();
 //        Collections.shuffle(recipeLists);
 
         adapter = new CardAdapter(getContext(), recipeLists);
@@ -133,7 +136,6 @@ public class SwipeItemFragment extends Fragment {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
 
-//                Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
 
                 Bundle recipeId = new Bundle();
 //                for (SpoonacularObjects objects : recipeLists){
@@ -141,23 +143,19 @@ public class SwipeItemFragment extends Fragment {
 //                }
                 int getCurrentID = recipeLists.get(0).getId();
                 String image = recipeLists.get(0).getImage();
-                recipeId.putInt(FoodListsMainFragment.RECIPEID_KEY, getCurrentID);
+                recipeId.putInt(FoodListsMainFragment.RECIPE_ID_KEY, getCurrentID);
                 recipeId.putString(FoodListsMainFragment.IMAGE_KEY, image);
-
 
                 Fragment ingredients = new IngredientsFragment();
                 ingredients.setArguments(recipeId);
+
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.addToBackStack(null);
-
                 transaction.replace(R.id.fragment_container_id, ingredients);
                 transaction.commit();
 
-
             }
         });
-
-
         return v;
     }
 
@@ -179,9 +177,6 @@ public class SwipeItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                /**
-                 * Trigger the right event manually.
-                 */
                 flingContainer.getTopCardListener().selectRight();
                 Timber.i("Saved");
                 recipeLists.remove(0);
@@ -190,12 +185,6 @@ public class SwipeItemFragment extends Fragment {
         });
 
     }
-
-    public void right() {
-    }
-    public void left() {
-    }
-
 
     private void retrofitRecipe() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -267,5 +256,12 @@ public class SwipeItemFragment extends Fragment {
             }
         });
     }
+
+    private String getSearchFilter(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        return sharedPreferences.getString(PreferencesFragment.Shared_FILTER_KEY, "");
+    }
+
 
 }
