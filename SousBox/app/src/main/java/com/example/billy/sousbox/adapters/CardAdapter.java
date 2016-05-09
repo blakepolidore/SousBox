@@ -41,7 +41,7 @@ public class CardAdapter extends ArrayAdapter<SpoonacularObjects> {
         String title = recipeData.get(0).getTitle();
         titleText.setText(title);
 
-        String imageURI = recipeData.get(position).getImage();
+        String imageURI = recipeData.get(0).getImage();
         if (imageURI.isEmpty()) {
             imageURI = "R.drawable.blank_white.png";
         }

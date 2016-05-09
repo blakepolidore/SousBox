@@ -2,7 +2,6 @@
 
 <LinearLayout
     android:padding="8dp"
-    android:layout_marginTop="50dp"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -28,12 +27,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+    <FrameLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
         <Button
             android:id="@+id/instruction_button_id"
             android:text="@string/instructions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <Button
+
+            android:id="@+id/ingredients_serving_button_id"
+            android:text="servings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical" />
+
+    </FrameLayout>
 
 
         <ListView

@@ -43,9 +43,13 @@ public class IngredientsFragment extends Fragment {
     private TextView title;
     private ImageView recipeImage;
     private Button instructionButton;
+    private Button servingsButton;
     private GetRecipeObjects getRecipeObjects;
     private SpoonacularObjects spoonacularObjects;
     private ProgressBar progress;
+    public final static String URL_KEY = "URL";
+   // public final static String SPOON_URL_KEY = "SPOON URL";
+    private Bundle instructionBundle;
 
 
 
@@ -59,6 +63,8 @@ public class IngredientsFragment extends Fragment {
         ingredientsLV = (ListView)v.findViewById(R.id.ingredients_listView_id);
         instructionButton = (Button) v.findViewById(R.id.instruction_button_id);
         progress = (ProgressBar) v.findViewById(R.id.ingredients_progress_bar_id);
+        servingsButton = (Button)v.findViewById(R.id.ingredients_serving_button_id);
+
 
         progress.setVisibility(View.VISIBLE);
         retrofitRecipeID();
@@ -78,7 +84,7 @@ public class IngredientsFragment extends Fragment {
         searchAPI = retrofit.create(RecipeAPI.class);
 
         Bundle bundle = getArguments();
-        id = bundle.getInt(FoodListsMainFragment.RECIPEID_KEY);
+        id = bundle.getInt(FoodListsMainFragment.RECIPE_ID_KEY);
         image = bundle.getString(FoodListsMainFragment.IMAGE_KEY);
 
 
@@ -101,14 +107,14 @@ public class IngredientsFragment extends Fragment {
                 }
                 Picasso.with(getContext())
                         .load("https://webknox.com/recipeImages/" + imageURI)
-                        .resize(500, 500)
-                        .centerCrop()
+//                        .resize(500, 500)
+//                        .centerCrop()
                         .into(recipeImage);
 
                 ingredientLists = new ArrayList<>();
 
                 SpoonGetRecipe[] recipe = getRecipeObjects.getExtendedIngredients();
-                for(int i = 0; i < recipe.length; i++ ){
+                for (int i = 0; i < recipe.length; i++) {
                     ingredientLists.add(recipe[i].getOriginalString());
                 }
 
@@ -131,21 +137,33 @@ public class IngredientsFragment extends Fragment {
         instructionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 String url = getRecipeObjects.getSourceUrl();
-
-                Bundle instructionBundle = new Bundle();
-                instructionBundle.putString("url", url);
-
-                Fragment instructionsFrag = new InstructionsFragment();
-                instructionsFrag.setArguments(instructionBundle);
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container_id, instructionsFrag);
-                transaction.commit();
-
-
+                instructionBundle = new Bundle();
+                instructionBundle.putString(URL_KEY, url);
+                setInstructionsFragment();
             }
         });
+
+        servingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String servingURL = getRecipeObjects.getSpoonacularSourceUrl();
+                instructionBundle = new Bundle();
+                instructionBundle.putString(URL_KEY, servingURL);
+                setInstructionsFragment();
+            }
+        });
+    }
+
+    private void setInstructionsFragment(){
+
+        Fragment instructionsFrag = new InstructionsFragment();
+        instructionsFrag.setArguments(instructionBundle);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
+
+        transaction.replace(R.id.fragment_container_id, instructionsFrag);
+        transaction.commit();
+
     }
 }

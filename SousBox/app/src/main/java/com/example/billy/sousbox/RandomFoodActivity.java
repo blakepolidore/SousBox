@@ -134,7 +134,7 @@ public class RandomFoodActivity extends AppCompatActivity {
                 Bundle recipeId = new Bundle(); //will bundle
                 int recipe = recipeLists.get(itemPosition).getId();
                 String image = recipeLists.get(itemPosition).getImage();
-                recipeId.putInt(FoodListsMainFragment.RECIPEID_KEY, recipe);
+                recipeId.putInt(FoodListsMainFragment.RECIPE_ID_KEY, recipe);
                 recipeId.putString(FoodListsMainFragment.IMAGE_KEY, image);
 
 
