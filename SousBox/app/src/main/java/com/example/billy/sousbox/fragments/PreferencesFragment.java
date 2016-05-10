@@ -94,6 +94,7 @@ public class PreferencesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.preferences_layout_fragment, container, false);
+        setRetainInstance(true);
         FacebookSdk.sdkInitialize(getContext());
         callbackManager = CallbackManager.Factory.create();
         initiViews(v);
@@ -133,6 +134,7 @@ public class PreferencesFragment extends Fragment {
         // if user logged in with Facebook, stop tracking their token
         if (mFacebookAccessTokenTracker != null) {
             mFacebookAccessTokenTracker.stopTracking();
+            logout();
         }
         // if changing configurations, stop tracking firebase session.
         mFirebaseRef.removeAuthStateListener(mAuthStateListener);
@@ -142,7 +144,6 @@ public class PreferencesFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-        Timber.i("inside activity Result");
     }
 
 
@@ -412,9 +413,12 @@ public class PreferencesFragment extends Fragment {
         }
     }
 
+
     private boolean isFacebookLoggedIn(){
         return AccessToken.getCurrentAccessToken() !=null;
     }
+
+
 
     private void facebookLogin(){
 
@@ -422,7 +426,7 @@ public class PreferencesFragment extends Fragment {
             mFacebookAccessTokenTracker = new AccessTokenTracker() {
                 @Override
                 protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                    Timber.i("Facebook.AccessTokenTracker.OnCurrentAccessTokenChanged");
+                   // Timber.i("Facebook.AccessTokenTracker.OnCurrentAccessTokenChanged");
                     PreferencesFragment.this.onFacebookAccessTokenChange(currentAccessToken);
                 }
             };
@@ -431,17 +435,8 @@ public class PreferencesFragment extends Fragment {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
                     fireBase();
+
                     Toast.makeText(getActivity(), "You are logged in",Toast.LENGTH_SHORT).show();
-
-//                    info.setText("User ID: " + loginResult.getAccessToken().getUserId()
-//                                    + "\n" +
-//                                    "Auth Token: "
-//                                    + loginResult.getAccessToken().getToken()
-//                    );
-
-//                fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.fragment_container_id, recipeListsFrag);
-//                fragmentTransaction.commit();
                 }
 
                 @Override
@@ -492,24 +487,6 @@ public class PreferencesFragment extends Fragment {
         }
     }
 
-    /**
-     * This method will attempt to authenticate a user to firebase given an oauth_token (and other
-     * necessary parameters depending on the provider)
-     */
-    private void authWithFirebase(final String provider, Map<String, String> options) {
-        if (options.containsKey("error")) {
-            showErrorDialog(options.get("error"));
-        } else {
-            mAuthProgressDialog.show();
-            if (provider.equals("twitter")) {
-                // if the provider is twitter, we pust pass in additional options, so use the options endpoint
-                mFirebaseRef.authWithOAuthToken(provider, options, new AuthResultHandler(provider));
-            } else {
-                // if the provider is not twitter, we just need to pass in the oauth_token
-                mFirebaseRef.authWithOAuthToken(provider, options.get("oauth_token"), new AuthResultHandler(provider));
-            }
-        }
-    }
 
     /**
      * Once a user is logged in, take the mAuthData provided from Firebase and "use" it.

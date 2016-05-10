@@ -8,13 +8,14 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+
+        android:name=".adapters.SousBoxFirebase"
         android:allowBackup="true"
-        android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar"
-        android:name=".adapters.SousBoxFirebase">
+        android:theme="@style/AppTheme.NoActionBar" >
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

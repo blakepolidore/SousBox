@@ -43,11 +43,11 @@ public class FoodListsMainFragment extends Fragment {
     public final static String RECIPE_ID_KEY = "recipeID";
     public final static String IMAGE_KEY = "image";
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.food_recipe_recycleview, container, false);
+        setRetainInstance(true);
         recyclerView = (RecyclerView) v.findViewById(R.id.recipeLists_recycleView_id);
         recipeLists = new ArrayList<>();
 
@@ -71,6 +71,7 @@ public class FoodListsMainFragment extends Fragment {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         return sharedPreferences.getString(PreferencesFragment.Shared_FILTER_KEY, "");
     }
+
 
     /**
      * Set the itemClicker for the recycleView

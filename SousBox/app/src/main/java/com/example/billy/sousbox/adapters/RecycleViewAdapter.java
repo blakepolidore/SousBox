@@ -21,8 +21,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
 
     ArrayList<SpoonacularObjects> data;
-    //SpoonacularObjects[] data = new SpoonacularObjects[0];
-    //LinkedList<SpoonacularObjects> listData;
     Context context;
     private static OnItemClickListener listener;
 

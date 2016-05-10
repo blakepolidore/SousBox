@@ -58,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * start the fragment when app start
+     */
+
     private void initiFragment(){
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null);
@@ -66,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * setting up the views
+     */
     private void initiViews(){
         callbackManager = CallbackManager.Factory.create();
         fragContainer = (FrameLayout)findViewById(R.id.fragment_container_id);
@@ -82,29 +88,9 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-       // getMenuInflater().inflate(R.menu.main, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-
+    /**
+     * bottom Navi SDK  - each tab will change to the fragment of choose
+     */
     private void bottomNavi(){
         AHBottomNavigation bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
 
@@ -119,23 +105,17 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.addItem(item2);
         bottomNavigation.addItem(item3);
         bottomNavigation.addItem(item4);
-
         // Set background color
-        bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
-
+//        bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
         // Disable the translation inside the CoordinatorLayout
         bottomNavigation.setBehaviorTranslationEnabled(false);
-
         // Change colors
-        bottomNavigation.setAccentColor(Color.parseColor("#F63D2B"));
-        bottomNavigation.setInactiveColor(Color.parseColor("#747474"));
-
+//        bottomNavigation.setAccentColor(Color.parseColor("#F63D2B"));
+//        bottomNavigation.setInactiveColor(Color.parseColor("#747474"));
         // Force to tint the drawable (useful for font with icon for example)
         bottomNavigation.setForceTint(true);
-
         // Force the titles to be displayed (against Material Design guidelines!)
         bottomNavigation.setForceTitlesDisplay(true);
-
         // Use colored navigation with circle reveal effect
         bottomNavigation.setColored(true);
 
@@ -148,8 +128,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(int position, boolean wasSelected) {
 
                 if(position ==0) {
-                    toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-
+                    toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                     recipeListsFrag = new FoodListsMainFragment();
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.addToBackStack(null);
@@ -159,9 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
                 if(position ==1) {
                     toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-
-                    //              Intent intent = new Intent(MainActivity.this, RandomFoodActivity.class);
-    //              startActivity(intent);
                     swipeItemActivityFrag = new SwipeItemFragment();
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.addToBackStack(null);

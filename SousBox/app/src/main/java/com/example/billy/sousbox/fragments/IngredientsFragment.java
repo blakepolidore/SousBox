@@ -67,6 +67,7 @@ public class IngredientsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.ingredients_layout_fragment, container, false);
+        setRetainInstance(true);
 
         recipeImage = (ImageView) v.findViewById(R.id.ingredients_imageView_id);
         title = (TextView) v.findViewById(R.id.ingredients_titleView_id);
@@ -159,8 +160,8 @@ public class IngredientsFragment extends Fragment {
                 }
                 Picasso.with(getContext())
                         .load("https://webknox.com/recipeImages/" + imageURI)
-//                        .resize(500, 500)
-//                        .centerCrop()
+                        .resize(250, 250)
+                        .centerCrop()
                         .into(recipeImage);
 
                 ingredientLists = new ArrayList<>();
