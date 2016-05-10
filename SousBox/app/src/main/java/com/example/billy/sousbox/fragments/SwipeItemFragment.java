@@ -18,6 +18,8 @@ import com.example.billy.sousbox.adapters.CardAdapter;
 import com.example.billy.sousbox.api.RecipeAPI;
 import com.example.billy.sousbox.api.SpoonacularObjects;
 import com.example.billy.sousbox.api.SpoonacularResults;
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -38,44 +40,38 @@ import timber.log.Timber;
 public class SwipeItemFragment extends Fragment {
 
     private static final String TAG = "SwipeItemFragment: ";
-
     private ArrayList<SpoonacularObjects> recipeLists;
     private CardAdapter adapter;
-    private int i;
-
-    RecipeAPI searchAPI;
+    private RecipeAPI searchAPI;
     public final static String MASHAPLE_HEADER = Keys.getMASHAPLE();
-    private String CHINESE = "chinese";
     private String foodType;
     private int OFFSET = 100;
-    String query;
-
+    private SwipeFlingAdapterView flingContainer;
+    private Button left;
+    private Button right;
     SpoonacularObjects spoonRecipe;
-
-    SwipeFlingAdapterView flingContainer;
-    Button left;
-    Button right;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.swipe_recipe_fragment, container, false);
-
         ButterKnife.inject(getActivity());
         recipeLists = new ArrayList<>();
+        foodType = getSearchFilter();
         retrofitRecipe();
+
         flingContainer = (SwipeFlingAdapterView) v.findViewById(R.id.frame);
         left = (Button) v.findViewById(R.id.left);
         right = (Button) v.findViewById(R.id.right);
+
         initiButtons();
 
-        foodType = getSearchFilter();
-//        Collections.shuffle(recipeLists);
+
+
 
         adapter = new CardAdapter(getContext(), recipeLists);
         flingContainer.setAdapter(adapter);
-
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
@@ -91,8 +87,8 @@ public class SwipeItemFragment extends Fragment {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
+                Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
 
-                Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT);
                 Timber.i("Saved");
                 recipeLists.remove(0);
                 adapter.notifyDataSetChanged();
@@ -101,6 +97,7 @@ public class SwipeItemFragment extends Fragment {
 
             @Override
             public void onRightCardExit(Object dataObject) {
+                Toast.makeText(getActivity(), "Next", Toast.LENGTH_SHORT).show();
 
                 recipeLists.remove(0);
                 adapter.notifyDataSetChanged();
@@ -109,11 +106,8 @@ public class SwipeItemFragment extends Fragment {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                //int moreRecipe = OFFSET *2;
-                // moreRetrofitRecipePulling(moreRecipe);
-//                if(itemsInAdapter == 29){
-//                moreRetrofitRecipePulling();
-//                }
+                //moreRetrofitRecipePulling();
+                //Toast.makeText(getActivity(), "Getting more listings", Toast.LENGTH_SHORT).show();
 
                 // Ask for more data here
 //                al.add("XML ".concat(String.valueOf(i)));
@@ -130,17 +124,24 @@ public class SwipeItemFragment extends Fragment {
             }
         });
 
+        initiFlingListener();
 
+        return v;
+    }
+
+
+    private void initiFlingListener(){
         // Optionally add an OnItemClickListener
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
 
-
                 Bundle recipeId = new Bundle();
+
 //                for (SpoonacularObjects objects : recipeLists){
 //                    Log.d(TAG, "Object in list: "+ objects.getId() + " and "+ getCurrentID);
 //                }
+
                 int getCurrentID = recipeLists.get(0).getId();
                 String image = recipeLists.get(0).getImage();
                 recipeId.putInt(FoodListsMainFragment.RECIPE_ID_KEY, getCurrentID);
@@ -156,7 +157,6 @@ public class SwipeItemFragment extends Fragment {
 
             }
         });
-        return v;
     }
 
 
@@ -199,21 +199,14 @@ public class SwipeItemFragment extends Fragment {
             @Override
             public void onResponse(Call<SpoonacularResults> call, Response<SpoonacularResults> response) {
                 SpoonacularResults spoonacularResults = response.body();
-
-
                 if (spoonacularResults == null) {
                     return;
                 }
 
-                //Collections.shuffle(recipeLists);
-
-
                 Collections.addAll(recipeLists, spoonacularResults.getResults());
                 long seed = System.nanoTime();
                 Collections.shuffle(recipeLists, new Random(seed));
-
                 adapter.notifyDataSetChanged();
-                //arrayAdapter.notifyDataSetChanged(spoonacularResults.getResults());
             }
 
             @Override
@@ -224,7 +217,7 @@ public class SwipeItemFragment extends Fragment {
         });
     }
 
-    private void moreRetrofitRecipePulling(int limit) {
+    private void moreRetrofitRecipePulling() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -232,7 +225,7 @@ public class SwipeItemFragment extends Fragment {
 
         searchAPI = retrofit.create(RecipeAPI.class);
 
-        Call<SpoonacularResults> call = searchAPI.searchMoreRecipe(limit, foodType);
+        Call<SpoonacularResults> call = searchAPI.searchMoreRecipe(foodType);
         call.enqueue(new Callback<SpoonacularResults>() {
             @Override
             public void onResponse(Call<SpoonacularResults> call, Response<SpoonacularResults> response) {
@@ -246,7 +239,6 @@ public class SwipeItemFragment extends Fragment {
                 Timber.i("pulling more listing");
                 Collections.addAll(recipeLists, spoonacularResults.getResults());
                 adapter.notifyDataSetChanged();
-                //arrayAdapter.notifyDataSetChanged(spoonacularResults.getResults());
             }
 
             @Override
@@ -264,4 +256,10 @@ public class SwipeItemFragment extends Fragment {
     }
 
 
+    private String getAuthData() {
+        Firebase firebase = new Firebase("https://sous-box.firebaseio.com");
+        AuthData authData = firebase.getAuth();
+        String userID = authData.getUid();
+        return userID;
+    }
 }

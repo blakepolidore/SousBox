@@ -2,6 +2,8 @@ package com.example.billy.sousbox.adapters;
 
 import android.app.Application;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.firebase.client.Firebase;
 
 /**
@@ -12,5 +14,7 @@ public class SousBoxFirebase extends Application {
     public void onCreate() {
         super.onCreate();
         Firebase.setAndroidContext(this);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
     }
 }
