@@ -103,6 +103,7 @@ public class PreferencesFragment extends Fragment {
         queryFilters = new QueryFilters();
         initiCheckboxClicks();
 
+
         return v;
     }
 
@@ -310,8 +311,10 @@ public class PreferencesFragment extends Fragment {
         });
     }
 
-
-
+    /**
+     * this is for saving the checkbox
+     * @param filterName
+     */
     private void setSearchFilter(String filterName){
 //        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -347,7 +350,6 @@ public class PreferencesFragment extends Fragment {
         editor.commit();
     }
 
-
     /**
      * Retrieves the state of the checkboxes from the shared preferences
      */
@@ -356,17 +358,58 @@ public class PreferencesFragment extends Fragment {
         super.onResume();
         porkCheck = sharedPreferences.getBoolean(PORK_CODE, porkCheck);
         porkCheckBox.setChecked(porkCheck);
+        if (porkCheckBox.isChecked()) {
+            seafoodCheckbox.setEnabled(false);
+            beefCheckBox.setEnabled(false);
+            chickenCheckBox.setEnabled(false);
+            vegetarianCheckBox.setEnabled(false);
+            allTypeCheckBox.setEnabled(false);
+        }
         beefCheck = sharedPreferences.getBoolean(BEEF_CODE, beefCheck);
         beefCheckBox.setChecked(beefCheck);
+        if (beefCheckBox.isChecked()) {
+            seafoodCheckbox.setEnabled(false);
+            porkCheckBox.setEnabled(false);
+            chickenCheckBox.setEnabled(false);
+            vegetarianCheckBox.setEnabled(false);
+            allTypeCheckBox.setEnabled(false);
+        }
         chickenCheck = sharedPreferences.getBoolean(CHICKEN_CODE, chickenCheck);
         chickenCheckBox.setChecked(chickenCheck);
+        if (chickenCheckBox.isChecked()) {
+            seafoodCheckbox.setEnabled(false);
+            beefCheckBox.setEnabled(false);
+            porkCheckBox.setEnabled(false);
+            vegetarianCheckBox.setEnabled(false);
+            allTypeCheckBox.setEnabled(false);
+        }
         seafoodCheck = sharedPreferences.getBoolean(SEAFOOD_CODE, seafoodCheck);
         seafoodCheckbox.setChecked(seafoodCheck);
+        if (seafoodCheckbox.isChecked()) {
+            porkCheckBox.setEnabled(false);
+            beefCheckBox.setEnabled(false);
+            chickenCheckBox.setEnabled(false);
+            vegetarianCheckBox.setEnabled(false);
+            allTypeCheckBox.setEnabled(false);
+        }
         vegetarianCheck = sharedPreferences.getBoolean(VEGETARIAN_CODE, vegetarianCheck);
         vegetarianCheckBox.setChecked(vegetarianCheck);
+        if (vegetarianCheckBox.isChecked()) {
+            seafoodCheckbox.setEnabled(false);
+            beefCheckBox.setEnabled(false);
+            chickenCheckBox.setEnabled(false);
+            porkCheckBox.setEnabled(false);
+            allTypeCheckBox.setEnabled(false);
+        }
         allTypeCheck = sharedPreferences.getBoolean(ALL_TYPE_CODE, allTypeCheck);
         allTypeCheckBox.setChecked(allTypeCheck);
-
+        if (allTypeCheckBox.isChecked()) {
+            seafoodCheckbox.setEnabled(false);
+            beefCheckBox.setEnabled(false);
+            chickenCheckBox.setEnabled(false);
+            vegetarianCheckBox.setEnabled(false);
+            porkCheckBox.setEnabled(false);
+        }
     }
 
     private boolean isFacebookLoggedIn(){
@@ -387,14 +430,14 @@ public class PreferencesFragment extends Fragment {
             loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
-
                     fireBase();
+                    Toast.makeText(getActivity(), "You are logged in",Toast.LENGTH_SHORT).show();
+
 //                    info.setText("User ID: " + loginResult.getAccessToken().getUserId()
 //                                    + "\n" +
 //                                    "Auth Token: "
 //                                    + loginResult.getAccessToken().getToken()
 //                    );
-                    //Toast.makeText(getActivity(), "You are logged in",Toast.LENGTH_SHORT).show();
 
 //                fragmentTransaction = fragmentManager.beginTransaction();
 //                fragmentTransaction.replace(R.id.fragment_container_id, recipeListsFrag);
@@ -403,12 +446,12 @@ public class PreferencesFragment extends Fragment {
 
                 @Override
                 public void onCancel() {
-                    info.setText("Login attempt canceled.");
+//                    info.setText("Login attempt canceled.");
                 }
 
                 @Override
                 public void onError(FacebookException e) {
-                    info.setText("Login attempt failed.");
+                    //info.setText("Login attempt failed.");
                     e.printStackTrace();
                 }
             });

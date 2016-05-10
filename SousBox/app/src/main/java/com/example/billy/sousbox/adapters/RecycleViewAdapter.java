@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by Billy on 4/29/16.
  */
-public class RecycleViewAdatper extends RecyclerView.Adapter<RecycleViewAdatper.RecyclerViewHolder> {
+public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.RecyclerViewHolder> {
 
 
     ArrayList<SpoonacularObjects> data;
@@ -28,7 +28,7 @@ public class RecycleViewAdatper extends RecyclerView.Adapter<RecycleViewAdatper.
 
 
 
-    public RecycleViewAdatper(ArrayList<SpoonacularObjects> data) {
+    public RecycleViewAdapter(ArrayList<SpoonacularObjects> data) {
         this.data = data;
     }
 

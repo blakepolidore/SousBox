@@ -24,14 +24,14 @@
         <Button
             android:id="@+id/left"
             android:layout_margin="15dp"
-            android:text="Like"
+            android:text="Skip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/right"
             android:layout_margin="15dp"
-            android:text="Skip"
+            android:text="Like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

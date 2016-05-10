@@ -198,7 +198,6 @@ public class RandomFoodActivity extends AppCompatActivity {
             public void onResponse(Call<SpoonacularResults> call, Response<SpoonacularResults> response) {
                 SpoonacularResults spoonacularResults = response.body();
 
-
                 if (spoonacularResults == null) {
                     return;
                 }
@@ -224,12 +223,11 @@ public class RandomFoodActivity extends AppCompatActivity {
 
         searchAPI = retrofit.create(RecipeAPI.class);
 
-        Call<SpoonacularResults> call = searchAPI.searchMoreRecipe(foodType);
+        Call<SpoonacularResults> call = searchAPI.searchMoreRecipe(100, foodType);
         call.enqueue(new Callback<SpoonacularResults>() {
             @Override
             public void onResponse(Call<SpoonacularResults> call, Response<SpoonacularResults> response) {
                 SpoonacularResults spoonacularResults = response.body();
-
 
                 if (spoonacularResults == null) {
                     return;

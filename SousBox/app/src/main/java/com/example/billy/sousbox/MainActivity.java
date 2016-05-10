@@ -16,12 +16,11 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 //import com.example.billy.sousbox.flingsswipe.SwipeFlingAdapterView;
 import com.example.billy.sousbox.fragments.PreferencesFragment;
 import com.example.billy.sousbox.fragments.FoodListsMainFragment;
+import com.example.billy.sousbox.fragments.SavedRecipeFragment;
 import com.example.billy.sousbox.fragments.SwipeItemFragment;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-
-import timber.log.Timber;
 //import com.bumptech.glide.Glide;
 
 
@@ -36,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private PreferencesFragment preferencesFragment;
     private SwipeItemFragment swipeItemActivityFrag;
     private CallbackManager callbackManager;
+    private SavedRecipeFragment savedRecipeFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
-
 
         initiViews();
         initiFragment();
@@ -57,13 +56,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-        Timber.i("inside activity Result");
     }
 
     private void initiFragment(){
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.replace(R.id.fragment_container_id, preferencesFragment);
+        fragmentTransaction.replace(R.id.fragment_container_id, recipeListsFrag);
         fragmentTransaction.commit();
 
     }
@@ -87,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main, menu);
+       // getMenuInflater().inflate(R.menu.main, menu);
+
         return true;
     }
 
@@ -99,13 +98,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
 
-
-
-
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -116,10 +109,10 @@ public class MainActivity extends AppCompatActivity {
         AHBottomNavigation bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
 
         // Create items
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.tab_1, R.drawable.ic_menu_gallery, R.color.colorPrimary);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.tab_2, R.drawable.ic_menu_share, R.color.colorPrimaryDark);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.tab_3, R.drawable.ic_menu_manage, R.color.colorAccent);
-        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.tab_4, R.drawable.ic_menu_manage, R.color.colorPrimary);
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.tab_1, R.drawable.ic_menu_gallery, R.color.colorPrimaryDark);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.tab_2, R.drawable.ic_random, R.color.colorPrimaryDark);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.tab_3, R.drawable.ic_menu_manage, R.color.colorPrimaryDark);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.tab_4, R.drawable.ic_saved_icon, R.color.colorPrimaryDark);
 
         // Add items
         bottomNavigation.addItem(item1);
@@ -147,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.setColored(true);
 
         // Set current item programmatically
-        bottomNavigation.setCurrentItem(2);
+        bottomNavigation.setCurrentItem(0);
 
         // Set listener
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
@@ -155,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(int position, boolean wasSelected) {
 
                 if(position ==0) {
+                    toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
                     recipeListsFrag = new FoodListsMainFragment();
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.addToBackStack(null);
@@ -163,7 +158,9 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(position ==1) {
-    //              Intent intent = new Intent(MainActivity.this, RandomFoodActivity.class);
+                    toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+
+                    //              Intent intent = new Intent(MainActivity.this, RandomFoodActivity.class);
     //              startActivity(intent);
                     swipeItemActivityFrag = new SwipeItemFragment();
                     fragmentTransaction = fragmentManager.beginTransaction();
@@ -179,6 +176,14 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTransaction.replace(R.id.fragment_container_id, preferencesFragment);
                     fragmentTransaction.commit();
                 }
+                if(position ==3) {
+                    savedRecipeFrag = new SavedRecipeFragment();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.replace(R.id.fragment_container_id, savedRecipeFrag);
+                    fragmentTransaction.commit();
+                }
+
 
             }
         });

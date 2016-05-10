@@ -45,7 +45,7 @@
         android:textSize="25dp"
         android:text=" "
         android:textStyle="bold"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
         android:id="@+id/swipeCard_titleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
